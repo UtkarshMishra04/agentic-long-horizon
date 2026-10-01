@@ -7,6 +7,6 @@ robosuite==1.4.1
 shapely==2.0.7
 PyYAML==6.0.3
 imageio==2.35.1
-pillow==10.4.0
+pillow==12.3.0
 tqdm==4.66.5
 pytest==8.3.3
