@@ -1,6 +1,6 @@
 [
   {
-    "env": "roboenvs/RedBoxToBlueSpot-v1",
+    "env": "LongHorizonTAMP/RedBoxToBlueSpot-v1",
     "seed": 7000,
     "scene_seed": 7000,
     "reasons": [
@@ -9,7 +9,7 @@
     ]
   },
   {
-    "env": "roboenvs/PackRack-v2",
+    "env": "LongHorizonTAMP/PackRack-v2",
     "seed": 12000,
     "scene_seed": 12000,
     "reasons": [
@@ -20,7 +20,7 @@
     ]
   },
   {
-    "env": "roboenvs/PackRack-v2",
+    "env": "LongHorizonTAMP/PackRack-v2",
     "seed": 13000,
     "scene_seed": 13001,
     "reasons": [
@@ -29,7 +29,7 @@
     ]
   },
   {
-    "env": "roboenvs/RedBoxToBlueSpot-v1",
+    "env": "LongHorizonTAMP/RedBoxToBlueSpot-v1",
     "seed": 17000,
     "scene_seed": 17004,
     "reasons": [
@@ -42,7 +42,7 @@
     ]
   },
   {
-    "env": "roboenvs/RedBoxToBlueSpot-v1",
+    "env": "LongHorizonTAMP/RedBoxToBlueSpot-v1",
     "seed": 19000,
     "scene_seed": 19004,
     "reasons": [
@@ -51,7 +51,7 @@
     ]
   },
   {
-    "env": "roboenvs/RedBoxUnderRack-v1",
+    "env": "LongHorizonTAMP/RedBoxUnderRack-v1",
     "seed": 0,
     "scene_seed": 1,
     "reasons": [
@@ -60,7 +60,7 @@
     ]
   },
   {
-    "env": "roboenvs/RedBoxUnderRack-v1",
+    "env": "LongHorizonTAMP/RedBoxUnderRack-v1",
     "seed": 5000,
     "scene_seed": 5001,
     "reasons": [
@@ -71,7 +71,7 @@
     ]
   },
   {
-    "env": "roboenvs/RedBoxUnderRack-v1",
+    "env": "LongHorizonTAMP/RedBoxUnderRack-v1",
     "seed": 7000,
     "scene_seed": 7000,
     "reasons": [
@@ -79,7 +79,7 @@
     ]
   },
   {
-    "env": "roboenvs/RedBoxUnderRack-v1",
+    "env": "LongHorizonTAMP/RedBoxUnderRack-v1",
     "seed": 8000,
     "scene_seed": 8004,
     "reasons": [
@@ -88,7 +88,7 @@
     ]
   },
   {
-    "env": "roboenvs/RedBoxUnderRack-v1",
+    "env": "LongHorizonTAMP/RedBoxUnderRack-v1",
     "seed": 9000,
     "scene_seed": 9000,
     "reasons": [
@@ -97,7 +97,7 @@
     ]
   },
   {
-    "env": "roboenvs/RedBoxUnderRack-v1",
+    "env": "LongHorizonTAMP/RedBoxUnderRack-v1",
     "seed": 10000,
     "scene_seed": 10000,
     "reasons": [
@@ -105,7 +105,7 @@
     ]
   },
   {
-    "env": "roboenvs/RedBoxUnderRack-v1",
+    "env": "LongHorizonTAMP/RedBoxUnderRack-v1",
     "seed": 12000,
     "scene_seed": 12000,
     "reasons": [
@@ -113,7 +113,7 @@
     ]
   },
   {
-    "env": "roboenvs/RedBoxUnderRack-v1",
+    "env": "LongHorizonTAMP/RedBoxUnderRack-v1",
     "seed": 13000,
     "scene_seed": 13000,
     "reasons": [
@@ -123,7 +123,7 @@
     ]
   },
   {
-    "env": "roboenvs/RedBoxUnderRack-v1",
+    "env": "LongHorizonTAMP/RedBoxUnderRack-v1",
     "seed": 17000,
     "scene_seed": 17001,
     "reasons": [

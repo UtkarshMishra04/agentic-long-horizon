@@ -1,7 +1,8 @@
-# RoboEnvs
+# LongHorizonTAMP
 
-Tabletop manipulation environments with a Franka Panda arm in robosuite (MuJoCo). Each environment
-samples a scene of objects on a table and defines a goal on the final arrangement of the objects.
+Long-horizon task and motion planning (TAMP) environments with a Franka Panda arm in robosuite (MuJoCo).
+Each environment samples a scene of objects on a table and defines a goal on the final arrangement of the
+objects.
 
 ## Install
 
@@ -14,15 +15,15 @@ export MUJOCO_GL=egl        # headless rendering on a GPU; MUJOCO_GL=osmesa on C
 
 | id | goal |
 |---|---|
-| `roboenvs/LiftRedBox-v0` | the red box is held by the gripper or raised above the table |
-| `roboenvs/RedBoxOnRack-v0` | the red box rests upright on the rack |
-| `roboenvs/RedBoxUnderRack-v0` | the red box is under the rack, resting on the table |
-| `roboenvs/RedBoxUnderRack-v1` | the same goal in a different scene distribution |
-| `roboenvs/RedBoxToBlueSpot-v0` | the red box is at the blue box's starting position, the L-shaped stick is back at its own starting position, the blue box and the stick rest on the table inside the workspace, and nothing rests on any of them |
-| `roboenvs/RedBoxToBlueSpot-v1` | the red box is at the blue box's starting position, the blue box and the L-shaped stick rest on the table inside the workspace, and nothing rests on any of them |
-| `roboenvs/PackRack-v0` | the yellow, red and cyan boxes rest upright on the rack |
-| `roboenvs/PackRack-v1` | the yellow, cyan and blue boxes rest upright on the rack |
-| `roboenvs/PackRack-v2` | the red, yellow, cyan and blue boxes rest upright on the rack |
+| `LongHorizonTAMP/LiftRedBox-v0` | the red box is held by the gripper or raised above the table |
+| `LongHorizonTAMP/RedBoxOnRack-v0` | the red box rests upright on the rack |
+| `LongHorizonTAMP/RedBoxUnderRack-v0` | the red box is under the rack, resting on the table |
+| `LongHorizonTAMP/RedBoxUnderRack-v1` | the same goal in a different scene distribution |
+| `LongHorizonTAMP/RedBoxToBlueSpot-v0` | the red box is at the blue box's starting position, the L-shaped stick is back at its own starting position, the blue box and the stick rest on the table inside the workspace, and nothing rests on any of them |
+| `LongHorizonTAMP/RedBoxToBlueSpot-v1` | the red box is at the blue box's starting position, the blue box and the L-shaped stick rest on the table inside the workspace, and nothing rests on any of them |
+| `LongHorizonTAMP/PackRack-v0` | the yellow, red and cyan boxes rest upright on the rack |
+| `LongHorizonTAMP/PackRack-v1` | the yellow, cyan and blue boxes rest upright on the rack |
+| `LongHorizonTAMP/PackRack-v2` | the red, yellow, cyan and blue boxes rest upright on the rack |
 
 The exact conditions, with their numeric parameters, are returned by `env.get_goal()`.
 
@@ -30,9 +31,9 @@ The exact conditions, with their numeric parameters, are returned by `env.get_go
 
 ```python
 import numpy as np
-import roboenvs
+import longhorizontamp
 
-env = roboenvs.make("roboenvs/RedBoxOnRack-v0", control="delta")
+env = longhorizontamp.make("LongHorizonTAMP/RedBoxOnRack-v0", control="delta")
 observation, info = env.reset(seed=1)
 state = env.get_state()          # flat float32 array, layout below
 goal = env.get_goal()            # {"text": str, "conditions": [dict, ...]}
@@ -44,8 +45,8 @@ frame = env.render()             # [256, 256, 3] uint8
 env.close()
 ```
 
-`roboenvs.make(env_id, control="delta", max_episode_steps=None, image_size=84,
-cameras=("agentview", "robot0_eye_in_hand"), render_size=256)`; `roboenvs.ENV_IDS` lists the ids.
+`longhorizontamp.make(env_id, control="delta", max_episode_steps=None, image_size=84,
+cameras=("agentview", "robot0_eye_in_hand"), render_size=256)`; `longhorizontamp.ENV_IDS` lists the ids.
 
 * `reset(seed=None) -> (observation, info)` samples a new scene. A seed whose scene is invalid is
   skipped; `info["scene_seed"]` is the seed of the scene actually used. A freshly created
@@ -83,15 +84,15 @@ x pointing away from the robot and z up (the same frame as the goal targets).
 
 | id | objects in `get_state()` order (each 7 values: position, quaternion) |
 |---|---|
-| `roboenvs/LiftRedBox-v0` | rack, lstick, red_box |
-| `roboenvs/RedBoxOnRack-v0` | rack, lstick, red_box |
-| `roboenvs/RedBoxUnderRack-v0` | rack, lstick, red_box |
-| `roboenvs/RedBoxUnderRack-v1` | rack, lstick, red_box |
-| `roboenvs/RedBoxToBlueSpot-v0` | lstick, red_box, blue_box |
-| `roboenvs/RedBoxToBlueSpot-v1` | lstick, red_box, blue_box |
-| `roboenvs/PackRack-v0` | rack, yellow_box, red_box, cyan_box |
-| `roboenvs/PackRack-v1` | rack, blue_box, yellow_box, cyan_box |
-| `roboenvs/PackRack-v2` | rack, blue_box, yellow_box, red_box, cyan_box |
+| `LongHorizonTAMP/LiftRedBox-v0` | rack, lstick, red_box |
+| `LongHorizonTAMP/RedBoxOnRack-v0` | rack, lstick, red_box |
+| `LongHorizonTAMP/RedBoxUnderRack-v0` | rack, lstick, red_box |
+| `LongHorizonTAMP/RedBoxUnderRack-v1` | rack, lstick, red_box |
+| `LongHorizonTAMP/RedBoxToBlueSpot-v0` | lstick, red_box, blue_box |
+| `LongHorizonTAMP/RedBoxToBlueSpot-v1` | lstick, red_box, blue_box |
+| `LongHorizonTAMP/PackRack-v0` | rack, yellow_box, red_box, cyan_box |
+| `LongHorizonTAMP/PackRack-v1` | rack, blue_box, yellow_box, cyan_box |
+| `LongHorizonTAMP/PackRack-v2` | rack, blue_box, yellow_box, red_box, cyan_box |
 
 The gripper has `G = 6` joints, so the object part starts at index 27 (e.g. 48 values for three objects).
 

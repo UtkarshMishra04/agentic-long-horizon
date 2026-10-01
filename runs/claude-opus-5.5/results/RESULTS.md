@@ -1,6 +1,6 @@
 # RESULTS
 
-Scripted (no learning) solutions for the 9 RoboEnvs environments. They use only `make`, `reset`,
+Scripted (no learning) solutions for the 9 LongHorizonTAMP environments. They use only `make`, `reset`,
 `get_state`, `get_goal`, `step` and `render`, with `control="absolute"`: each action is a target
 gripper pose plus a gripper command.
 

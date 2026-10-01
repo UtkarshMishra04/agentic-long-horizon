@@ -1,6 +1,6 @@
 """Tabletop scene on robosuite (MuJoCo): a Panda arm with a Robotiq 2F-85 gripper, a table and objects.
 
-A scene is described by a YAML file (``roboenvs/tasks``): its objects and one or more *variants*,
+A scene is described by a YAML file (``longhorizontamp/tasks``): its objects and one or more *variants*,
 each with the propositions its initial state satisfies and the propositions of its goal. ``reset``
 samples object poses satisfying the initial state and moves the gripper to a random start pose above
 the table; the goal holds when every goal proposition holds.
@@ -27,8 +27,8 @@ from robosuite.models.arenas import TableArena  # noqa: E402
 from robosuite.models.tasks import ManipulationTask  # noqa: E402
 from robosuite.utils import transform_utils as T  # noqa: E402
 
-from roboenvs import predicates  # noqa: E402
-from roboenvs.geometry import (  # noqa: E402
+from longhorizontamp import predicates  # noqa: E402
+from longhorizontamp.geometry import (  # noqa: E402
     START_POSE,
     TABLE_CONSTRAINTS,
     TOP_DOWN_ROTATION,
@@ -40,7 +40,7 @@ from roboenvs.geometry import (  # noqa: E402
     wrap_angle,
     yaw_quat,
 )
-from roboenvs.objects import (  # noqa: E402
+from longhorizontamp.objects import (  # noqa: E402
     OBJECT_STATE_RANGES,
     SceneObject,
     Table,

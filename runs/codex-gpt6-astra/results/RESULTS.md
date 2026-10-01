@@ -1,4 +1,4 @@
-# RoboEnvs controller results
+# LongHorizonTAMP controller results
 
 All nine solutions are hand-written Python state-feedback controllers. They use only public reset/state/goal/step data for control, with no training, learned models, rollout fitting, GPU, simulator access, or private environment members. NumPy, SciPy rotation utilities, and Shapely geometry are used for deterministic calculations.
 
@@ -83,23 +83,23 @@ Failed video seeds: RedBoxUnderRack-v1: 904620, 859916, 417674; PackRack-v0: 710
 From `/workspace`:
 
 ```bash
-PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python solutions/LiftRedBox-v0.py --seed 0
-PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python solutions/RedBoxOnRack-v0.py --seed 0
-PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python solutions/RedBoxUnderRack-v0.py --seed 0
-PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python solutions/RedBoxUnderRack-v1.py --seed 1000
-PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python solutions/RedBoxToBlueSpot-v0.py --seed 0
-PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python solutions/RedBoxToBlueSpot-v1.py --seed 0
-PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python solutions/PackRack-v0.py --seed 0
-PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python solutions/PackRack-v1.py --seed 0
-PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python solutions/PackRack-v2.py --seed 0
+PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python solutions/LiftRedBox-v0.py --seed 0
+PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python solutions/RedBoxOnRack-v0.py --seed 0
+PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python solutions/RedBoxUnderRack-v0.py --seed 0
+PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python solutions/RedBoxUnderRack-v1.py --seed 1000
+PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python solutions/RedBoxToBlueSpot-v0.py --seed 0
+PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python solutions/RedBoxToBlueSpot-v1.py --seed 0
+PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python solutions/PackRack-v0.py --seed 0
+PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python solutions/PackRack-v1.py --seed 0
+PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python solutions/PackRack-v2.py --seed 0
 ```
 
 Reproduce evaluation and videos:
 
 ```bash
-PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python evaluate.py --workers 6 --output /workspace/results.jsonl
-PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python record_videos.py --workers 2
-PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python assemble_videos.py
+PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python evaluate.py --workers 6 --output /workspace/results.jsonl
+PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python record_videos.py --workers 2
+PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python assemble_videos.py
 ```
 
-Validation: Python compilation; static audit of environment attribute access; full episode evaluation; and ffprobe checks of all 45 video resolutions/frame counts plus the combined frame total and 45 chapter markers; and a full decode of the combined video with no errors. Environment source under `/opt/RoboEnvs` was read, not modified.
+Validation: Python compilation; static audit of environment attribute access; full episode evaluation; and ffprobe checks of all 45 video resolutions/frame counts plus the combined frame total and 45 chapter markers; and a full decode of the combined video with no errors. Environment source under `/opt/LongHorizonTAMP` was read, not modified.

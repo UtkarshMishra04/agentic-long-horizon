@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Two coding agents solve RoboEnvs: Codex (GPT-6-Astra) vs Claude Code (Opus 5.5)</title>
+<title>Two coding agents solve LongHorizonTAMP: Codex (GPT-6-Astra) vs Claude Code (Opus 5.5)</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <nav><div class="inner">
-  <span class="brand">RoboEnvs × coding agents</span>
+  <span class="brand">LongHorizonTAMP × coding agents</span>
   <a href="#benchmark">Benchmark</a>
   <a href="#setup">Setup</a>
   <a href="#results">Results</a>
@@ -30,7 +30,7 @@
 </header>
 
 <section id="benchmark">
-  <h2>The benchmark: RoboEnvs</h2>
+  <h2>The benchmark: LongHorizonTAMP</h2>
   <p class="lede">Nine <strong>long-horizon task and motion planning</strong> problems for a 7-joint Franka Panda arm
   with a parallel gripper, simulated in MuJoCo through robosuite. Each task is only a goal on how the objects should
   end up — no sequence of steps is given. Reaching it takes a chain of several manipulations (bringing objects into
@@ -81,7 +81,7 @@
   <div class="grid3">
     <div class="card"><h3>Sandbox</h3>
       <p class="small">A Docker container (Python 3.8, MuJoCo 2.3.7, robosuite 1.4.1, CPU rendering, 10 cores, no
-      GPU), running as a non-root user. The environments are baked in read-only at <code>/opt/RoboEnvs</code>;
+      GPU), running as a non-root user. The environments are baked in read-only at <code>/opt/LongHorizonTAMP</code>;
       <code>/workspace</code> is the only writable folder. Nothing else from the research code base is inside.</p></div>
     <div class="card"><h3>Rules</h3>
       <p class="small">No training, learned models, reinforcement learning or GPU: plain Python. Solutions may only

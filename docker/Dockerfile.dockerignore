@@ -1,6 +1,6 @@
-# Only RoboEnvs and the requirements enter the image; the rest of the repository stays out.
+# Only LongHorizonTAMP and the requirements enter the image; the rest of the repository stays out.
 *
-!RoboEnvs
+!LongHorizonTAMP
 !docker/requirements.txt
-RoboEnvs/**/__pycache__
-RoboEnvs/**/*.pyc
+LongHorizonTAMP/**/__pycache__
+LongHorizonTAMP/**/*.pyc

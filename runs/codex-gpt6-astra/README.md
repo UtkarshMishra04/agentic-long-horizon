@@ -1,5 +1,7 @@
 # Codex (GPT-6-Astra, medium effort)
 
+> **Naming.** Environment identifiers in this agent's code and log were updated to the release names (package `longhorizontamp`, ids `LongHorizonTAMP/<Task>`); nothing else was changed.
+
 Codex CLI 0.159.2 with `--dangerously-bypass-approvals-and-sandbox --no-daemon`, in the container from
 `docker/`. Given the task as a `/goal` plus three follow-ups during the run (see `prompts/codex_as_given.md`).
 Worked 1 h 44 min (2026-09-30, 17:52–19:37 UTC), 266 tool calls.

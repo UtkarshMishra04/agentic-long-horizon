@@ -1,9 +1,9 @@
-# Container with the RoboEnvs simulation environments and the Claude Code / Codex CLIs.
+# Container with the LongHorizonTAMP simulation environments and the Claude Code / Codex CLIs.
 #
-# RoboEnvs is copied to /opt/RoboEnvs, owned by root and read-only; the container runs as the
+# LongHorizonTAMP is copied to /opt/LongHorizonTAMP, owned by root and read-only; the container runs as the
 # non-root user `agent`, whose only writable locations are /workspace (a host folder) and its home.
 #
-#   docker build -t roboenvs -f docker/Dockerfile .
+#   docker build -t longhorizontamp -f docker/Dockerfile .
 #   docker/run.sh                  # interactive shell as `agent` (claude, codex available)
 FROM python:3.8-slim-bookworm AS base
 
@@ -35,17 +35,17 @@ RUN useradd --create-home --shell /bin/bash agent \
 FROM base
 RUN apt-get update && apt-get install -y --no-install-recommends tmux \
     && rm -rf /var/lib/apt/lists/*
-COPY RoboEnvs /opt/RoboEnvs
-RUN chown -R root:root /opt/RoboEnvs \
-    && find /opt/RoboEnvs -type d -exec chmod 555 {} + \
-    && find /opt/RoboEnvs -type f -exec chmod 444 {} +
+COPY LongHorizonTAMP /opt/LongHorizonTAMP
+RUN chown -R root:root /opt/LongHorizonTAMP \
+    && find /opt/LongHorizonTAMP -type d -exec chmod 555 {} + \
+    && find /opt/LongHorizonTAMP -type f -exec chmod 444 {} +
 # In this container both CLIs run without permission prompts (it is the sandbox: non-root, read-only
-# RoboEnvs, /workspace the only writable host folder).
+# LongHorizonTAMP, /workspace the only writable host folder).
 RUN printf '%s\n' \
       "alias claude='claude --dangerously-skip-permissions'" \
       "alias codex='codex --dangerously-bypass-approvals-and-sandbox --no-daemon'" \
       >> /home/agent/.bashrc
-ENV PYTHONPATH=/opt/RoboEnvs \
+ENV PYTHONPATH=/opt/LongHorizonTAMP \
     CLAUDE_CONFIG_DIR=/home/agent/.claude \
     CODEX_HOME=/home/agent/.codex
 USER agent

@@ -1,38 +1,40 @@
 # Codex (GPT-6-Astra, medium): key conversation log
 
+> **Naming.** Environment identifiers in this agent's code and log were updated to the release names (package `longhorizontamp`, ids `LongHorizonTAMP/<Task>`); nothing else was changed.
+
 Prompts, the agent's own narration, and the commands it ran (command output omitted). Times are UTC.
 
 
 ### 17:52:28 · user
 
-/goal Write controllers that solve the 9 robot manipulation environments in /opt/RoboEnvs (read-only; read /opt/RoboEnvs/README.md first, source in /opt/RoboEnvs/roboenvs). Python: /usr/local/bin/python (3.8), roboenvs importable via PYTHONPATH=/opt/RoboEnvs, headless rendering with MUJOCO_GL=osmesa already set; 10 CPU cores, no GPU. Environments are listed in roboenvs.ENV_IDS; each has reset(seed), get_state(), get_goal(), step(action), render(), close(), and reward 1.0 when the goal is reached. Do not use any approach that requires training or a GPU: no learning from data, no neural networks, no reinforcement learning, no fitting models to rollouts. Controllers may only use the public interface (reset, get_state, get_goal, step, action_space, observation_space); you may read the source to understand the environments but must not call private members (names starting with _) or the simulator directly. Put all code, notes and results in /workspace. Deliverables: a controller for every environment runnable with one command each; an evaluation script running each controller on at least 20 seeds per environment and reporting success rates; /workspace/RESULTS.md with per-environment success rates, how each controller works, and remaining failure cases. Aim for every environment solved on every seed; if not, explain why and what you tried. Work autonomously until done.
+/goal Write controllers that solve the 9 robot manipulation environments in /opt/LongHorizonTAMP (read-only; read /opt/LongHorizonTAMP/README.md first, source in /opt/LongHorizonTAMP/longhorizontamp). Python: /usr/local/bin/python (3.8), longhorizontamp importable via PYTHONPATH=/opt/LongHorizonTAMP, headless rendering with MUJOCO_GL=osmesa already set; 10 CPU cores, no GPU. Environments are listed in longhorizontamp.ENV_IDS; each has reset(seed), get_state(), get_goal(), step(action), render(), close(), and reward 1.0 when the goal is reached. Do not use any approach that requires training or a GPU: no learning from data, no neural networks, no reinforcement learning, no fitting models to rollouts. Controllers may only use the public interface (reset, get_state, get_goal, step, action_space, observation_space); you may read the source to understand the environments but must not call private members (names starting with _) or the simulator directly. Put all code, notes and results in /workspace. Deliverables: a controller for every environment runnable with one command each; an evaluation script running each controller on at least 20 seeds per environment and reporting success rates; /workspace/RESULTS.md with per-environment success rates, how each controller works, and remaining failure cases. Aim for every environment solved on every seed; if not, explain why and what you tried. Work autonomously until done.
 
 **17:52:32 · agent:** I’ll read the environment documentation and source, build controllers using the public interface, and evaluate each on at least 20 seeds.
 
-- `17:52:35` shell: `cat /opt/RoboEnvs/README.md`
-- `17:52:35` shell: `ls -la /workspace && rg --files /opt/RoboEnvs/roboenvs`
-- `17:52:40` shell: `cat /opt/RoboEnvs/README.md`
-- `17:52:40` shell: `ls -la /workspace && rg --files /opt/RoboEnvs/roboenvs`
+- `17:52:35` shell: `cat /opt/LongHorizonTAMP/README.md`
+- `17:52:35` shell: `ls -la /workspace && rg --files /opt/LongHorizonTAMP/longhorizontamp`
+- `17:52:40` shell: `cat /opt/LongHorizonTAMP/README.md`
+- `17:52:40` shell: `ls -la /workspace && rg --files /opt/LongHorizonTAMP/longhorizontamp`
 **17:53:14 · agent:** I’ll resume by reading the documentation and checking the workspace, now that command execution is available.
 
-- `17:53:15` shell: `cat /opt/RoboEnvs/README.md`
-- `17:53:15` shell: `ls -la /workspace && rg --files /opt/RoboEnvs/roboenvs`
+- `17:53:15` shell: `cat /opt/LongHorizonTAMP/README.md`
+- `17:53:15` shell: `ls -la /workspace && rg --files /opt/LongHorizonTAMP/longhorizontamp`
 - `17:53:21` shell: `cat controllers.py evaluate.py TASK.md test2.log lift.log`
-- `17:53:21` shell: `cat /opt/RoboEnvs/roboenvs/env.py`
-- `17:53:21` shell: `cat /opt/RoboEnvs/roboenvs/assets/*.yaml /opt/RoboEnvs/roboenvs/tasks/*.yaml /opt/RoboEnvs/roboenvs/predicates.py`
-- `17:53:27` shell: `cat /opt/RoboEnvs/roboenvs/assets/*.yaml /opt/RoboEnvs/roboenvs/tasks/*.yaml`
-- `17:53:27` shell: `rg -n 'control_step|eef_pose|controller|gripper|origin' /opt/RoboEnvs/roboenvs/scene.py`
+- `17:53:21` shell: `cat /opt/LongHorizonTAMP/longhorizontamp/env.py`
+- `17:53:21` shell: `cat /opt/LongHorizonTAMP/longhorizontamp/assets/*.yaml /opt/LongHorizonTAMP/longhorizontamp/tasks/*.yaml /opt/LongHorizonTAMP/longhorizontamp/predicates.py`
+- `17:53:27` shell: `cat /opt/LongHorizonTAMP/longhorizontamp/assets/*.yaml /opt/LongHorizonTAMP/longhorizontamp/tasks/*.yaml`
+- `17:53:27` shell: `rg -n 'control_step|eef_pose|controller|gripper|origin' /opt/LongHorizonTAMP/longhorizontamp/scene.py`
 - `17:53:27` shell: `ps -eo pid,etime,args | head -25`
-- `17:53:35` shell: `sed -n '160,205p;256,271p;290,385p' /opt/RoboEnvs/roboenvs/scene.py; cat /opt/RoboEnvs/roboenvs/geometry.py | head -110; cat /opt/RoboEnvs/roboenvs/objects.py | head -200`
-- `17:53:35` shell: `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python controllers.py LiftRedBox-v0 --seed 0 --verbose`
+- `17:53:35` shell: `sed -n '160,205p;256,271p;290,385p' /opt/LongHorizonTAMP/longhorizontamp/scene.py; cat /opt/LongHorizonTAMP/longhorizontamp/geometry.py | head -110; cat /opt/LongHorizonTAMP/longhorizontamp/objects.py | head -200`
+- `17:53:35` shell: `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python controllers.py LiftRedBox-v0 --seed 0 --verbose`
 - `17:53:42` shell: `sed -i "s/cameras=('agentview',)/cameras=()/" controllers.py`
-- `17:54:04` shell: `ls /proc | tail; tail -15 pilot2.log; sed -n '245,355p' /opt/RoboEnvs/roboenvs/objects.py`
+- `17:54:04` shell: `ls /proc | tail; tail -15 pilot2.log; sed -n '245,355p' /opt/LongHorizonTAMP/longhorizontamp/objects.py`
 **17:54:09 · agent:** The workspace contains an initial controller and evaluator, but no completed evaluation. I’m testing those first. The main challenges are reaching the distant boxes, sliding a box under the low rack, and packing the rack without disturbing placed boxes.
 
 - `17:54:14` shell: `/usr/local/bin/python - <<'PY'`
 - `17:54:14` shell: `tail -12 pilot2.log`
 - `17:54:24` shell: `kill -STOP 628 638`
-- `17:54:30` shell: `rg -n -A20 'def camera_images' /opt/RoboEnvs/roboenvs/scene.py`
+- `17:54:30` shell: `rg -n -A20 'def camera_images' /opt/LongHorizonTAMP/longhorizontamp/scene.py`
 - `17:54:36` shell: `sed -i "s/cameras=()/cameras=('agentview',)/" controllers.py`
 - `17:54:36` shell: `tail -10 check.log`
 - `17:54:42` shell: `tail -8 check.log; tail -6 pilot3.log; cat /sys/fs/cgroup/cpu.max`
@@ -42,7 +44,7 @@ Prompts, the agent's own narration, and the commands it ran (command output omit
 
 - `17:55:23` shell: `tail -8 check.log; tail -8 pilot3.log; tail -5 under.log`
 - `17:55:23` shell: `cp controllers.py baseline.py`
-- `17:55:29` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python controllers.py LiftRedBox-v0 --seed 0 --verbose > far.log 2>&1`
+- `17:55:29` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python controllers.py LiftRedBox-v0 --seed 0 --verbose > far.log 2>&1`
 - `17:55:29` shell: `tail -5 pilot3.log; tail -8 check.log`
 - `17:55:41` shell: `cat > /workspace/probe.py <<'PY'`
 - `17:55:41` shell: `tail -7 far.log; tail -8 pilot3.log`
@@ -54,7 +56,7 @@ Prompts, the agent's own narration, and the commands it ran (command output omit
 
 - `17:56:20` shell: `kill 1688`
 - `17:56:20` shell: `tail -10 pilot3.log; tail -6 on.log`
-- `17:56:34` shell: `rg -n -A35 'def lstick' /opt/RoboEnvs/roboenvs/geometry.py; sed -n '225,248p' /opt/RoboEnvs/roboenvs/objects.py; tail -6 check.log; tail -8 pilot3.log`
+- `17:56:34` shell: `rg -n -A35 'def lstick' /opt/LongHorizonTAMP/longhorizontamp/geometry.py; sed -n '225,248p' /opt/LongHorizonTAMP/longhorizontamp/objects.py; tail -6 check.log; tail -8 pilot3.log`
 - `17:57:01` shell: `/usr/local/bin/python - <<'PY'`
 - `17:57:01` shell: `tail -6 on.log; tail -6 under2.log; tail -8 pilot3.log`
 
@@ -66,17 +68,17 @@ Clarification of the goal: the deliverable is Python code that solves the tasks.
 
 - `17:57:22` shell: `cat on.log; tail -12 under2.log; tail -8 spot.log; tail -8 check.log`
 - `17:57:22` shell: `mkdir -p solutions`
-- `17:57:53` shell: `rg 'INTERSECTION_THRESHOLD|EPSILONS' /opt/RoboEnvs/roboenvs/geometry.py`
-- `17:57:53` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python controllers.py RedBoxUnderRack-v0 --seed 0 --verbose > under3.log 2>&1`
+- `17:57:53` shell: `rg 'INTERSECTION_THRESHOLD|EPSILONS' /opt/LongHorizonTAMP/longhorizontamp/geometry.py`
+- `17:57:53` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python controllers.py RedBoxUnderRack-v0 --seed 0 --verbose > under3.log 2>&1`
 - `17:58:05` shell: `kill 1713 1715 1716 1717 1718 1719 1720 1721 1722`
 - `17:58:05` shell: `tail -6 spot.log; tail -5 on2.log; tail -5 under3.log`
 **17:58:17 · agent:** The first blue-spot test succeeded with one pick-and-place. Its goal allows a 15 cm position tolerance, so the controller found a clear landing point near the blue box without moving the blue box or stick. I’ve also created all nine Python entry points.
 
 - `17:58:42` shell: `cat > evaluate.py <<'PY'`
 - `17:58:54` shell: `rg -n 'finger|pad|grip_site' /usr/local/lib/python3.8/site-packages/robosuite/models/assets/grippers/robotiq_gripper_85.xml | head -35; tail -8 under3.log; tail -5 on2.log`
-- `17:59:00` shell: `sed -n '35,54p' /usr/local/lib/python3.8/site-packages/robosuite/models/assets/grippers/robotiq_gripper_85.xml; sed -n '220,245p' /opt/RoboEnvs/roboenvs/scene.py; tail -8 pilot4.log`
+- `17:59:00` shell: `sed -n '35,54p' /usr/local/lib/python3.8/site-packages/robosuite/models/assets/grippers/robotiq_gripper_85.xml; sed -n '220,245p' /opt/LongHorizonTAMP/longhorizontamp/scene.py; tail -8 pilot4.log`
 - `17:59:09` shell: `sed -i "s/radial+np.pi\/2/radial/g; s/R.from_euler('z',np.pi\/2)/R.from_euler('z',0)/g" controllers.py`
-- `17:59:09` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python controllers.py RedBoxUnderRack-v0 --seed 0 --verbose > under4.log 2>&1`
+- `17:59:09` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python controllers.py RedBoxUnderRack-v0 --seed 0 --verbose > under4.log 2>&1`
 
 ### 17:59:11 · user
 
@@ -104,9 +106,9 @@ final deliverable also included a rendered video file showing the full solution 
 - `18:01:57` shell: `/usr/local/bin/python - <<'PY'`
 - `18:01:57` shell: `ls debug; tail -5 eval_v1.log`
 - `18:02:09` shell: `tail -5 under5.log; tail -4 eval_v1.log`
-- `18:02:20` shell: `rg -n 'camera|agentview' /opt/RoboEnvs/roboenvs/scene.py | head -25; tail -8 under5.log; tail -8 debug/under.log`
-- `18:02:30` shell: `sed -n '390,426p' /opt/RoboEnvs/roboenvs/scene.py; tail -6 under5.log; tail -4 eval_v1.log`
-- `18:02:40` shell: `rg -n -A7 'def top_down_yaw' /opt/RoboEnvs/roboenvs/geometry.py; tail -5 eval_v1.log; tail -5 under5.log`
+- `18:02:20` shell: `rg -n 'camera|agentview' /opt/LongHorizonTAMP/longhorizontamp/scene.py | head -25; tail -8 under5.log; tail -8 debug/under.log`
+- `18:02:30` shell: `sed -n '390,426p' /opt/LongHorizonTAMP/longhorizontamp/scene.py; tail -6 under5.log; tail -4 eval_v1.log`
+- `18:02:40` shell: `rg -n -A7 'def top_down_yaw' /opt/LongHorizonTAMP/longhorizontamp/geometry.py; tail -5 eval_v1.log; tail -5 under5.log`
 - `18:05:30` shell: `/usr/local/bin/python - <<'PY'`
 - `18:06:05` shell: `cat > rack_probe.py <<'PY'`
 - `18:06:05` shell: `/usr/local/bin/python - <<'PY'`
@@ -120,7 +122,7 @@ final deliverable also included a rendered video file showing the full solution 
 - `18:07:56` shell: `/usr/local/bin/python - <<'PY'`
 - `18:07:56` shell: `tail -12 push_probe.log`
 - `18:08:14` shell: `sed -i 's/range(30)/range(130)/; s/c.step(ee+\[.008,0,0\])/c.step([ee[0]+.012,ee[1]+(r[1]-red[1])*.2,.028])/' push_probe.py`
-- `18:08:14` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python controllers.py RedBoxUnderRack-v0 --seed 0 --verbose > under6.log 2>&1`
+- `18:08:14` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python controllers.py RedBoxUnderRack-v0 --seed 0 --verbose > under6.log 2>&1`
 - `18:08:41` shell: `cat > hook_probe.py <<'PY'`
 - `18:08:49` shell: `tail -6 under6.log; tail -4 push_probe2.log; tail -6 eval_v3_other.log; tail -4 far1700.log`
 - `18:08:57` shell: `tail -6 push_probe2.log; tail -8 hook_probe.log; tail -4 under6.log; wc -l eval_v3_other.jsonl`
@@ -148,9 +150,9 @@ final deliverable also included a rendered video file showing the full solution 
 **18:13:46 · agent:** The stick hook retrieved the previously unreachable box, and that test then completed rack placement. I’m integrating the hook as a reach fallback and adding final position feedback before release to improve placement accuracy near other objects.
 
 - `18:13:50` shell: `tail -6 under7.log; tail -5 spot400.log; tail -6 eval_v3_other.log`
-- `18:13:50` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python evaluate.py --seeds 3 --stride 700 --env LiftRedBox-v0 RedBoxOnRack-v0 RedBoxUnderRack-v0 RedBoxUnderRack-v1 --workers 3 --output pilot_v5.jsonl > pilot_`
+- `18:13:50` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python evaluate.py --seeds 3 --stride 700 --env LiftRedBox-v0 RedBoxOnRack-v0 RedBoxUnderRack-v0 RedBoxUnderRack-v1 --workers 3 --output pilot_v5.jsonl > pilot_`
 - `18:14:11` shell: `tail -6 eval_v3_other.log; tail -6 spot400.log; tail -6 pilot_v5.log`
-- `18:14:40` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python - <<'PY' > inspect400.log 2>&1`
+- `18:14:40` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python - <<'PY' > inspect400.log 2>&1`
 - `18:14:40` shell: `tail -4 pilot_v5.log; tail -5 eval_v3_other.log`
 - `18:15:02` shell: `tail -8 inspect400.log; tail -6 spot400.log; tail -5 pilot_v5.log; tail -4 eval_v3_other.log`
 **18:15:15 · agent:** The tool-assisted under-rack test passed, with the box staying upright. A separate failure test also showed that moving the arm to a central pose before grasping improved accuracy. I’m adding that initialization and checking it across the task families.
@@ -160,7 +162,7 @@ final deliverable also included a rendered video file showing the full solution 
 - `18:16:38` shell: `rg 'lifted|placed|True|False' inspect400.log; tail -3 spot400.log; /usr/local/bin/python - <<'PY'`
 - `18:17:14` shell: `/usr/local/bin/python - <<'PY'`
 - `18:17:24` shell: `cat /sys/fs/cgroup/memory.max /sys/fs/cgroup/memory.events; /usr/local/bin/python - <<'PY'`
-- `18:17:58` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python record_videos.py --workers 2 > videos.log 2>&1`
+- `18:17:58` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python record_videos.py --workers 2 > videos.log 2>&1`
 - `18:17:58` shell: `cat > README.md <<'EOF'`
 **18:18:05 · agent:** The revised evaluation is running on 20 seeds spaced 1,000 apart, and video recording has started on five reproducibly random seeds per task. An older diagnostic batch lost a worker during concurrent runs; I’ve limited the current evaluation and recording to eight simulation workers total.
 
@@ -185,12 +187,12 @@ final deliverable also included a rendered video file showing the full solution 
 - `18:22:25` shell: `/usr/local/bin/python - <<'PY'`
 - `18:22:25` shell: `/usr/local/bin/python audit_interface.py; tail -3 under_v7.log`
 - `18:22:32` shell: `/usr/local/bin/python - <<'PY'`
-- `18:22:53` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python - <<'PY' > under700_init.log 2>&1`
+- `18:22:53` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python - <<'PY' > under700_init.log 2>&1`
 - `18:22:53` shell: `tail -5 evaluation.log; tail -3 under_v7.log`
 - `18:23:05` shell: `tail -14 under700_init.log; tail -5 evaluation.log; tail -3 under_v7.log`
 - `18:23:20` shell: `tail -10 under700_init.log; /usr/local/bin/python - <<'PY'`
 - `18:23:45` shell: `kill 3081 3084 3085`
-- `18:23:45` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python experiment.py RedBoxUnderRack-v0 --seed 1400 --verbose > under1400_new.log 2>&1`
+- `18:23:45` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python experiment.py RedBoxUnderRack-v0 --seed 1400 --verbose > under1400_new.log 2>&1`
 - `18:23:45` shell: `tail -8 evaluation.log`
 - `18:24:26` shell: `cat > assemble_videos.py <<'PY'`
 **18:24:37 · agent:** The integrated run has passed initial cases for both blue-spot tasks and all three packing variants. I’m investigating two under-rack failures where the tool motion stalled after grasping the stick. The video assembly script is ready to combine all 45 clips and verify their frame counts.
@@ -205,7 +207,7 @@ final deliverable also included a rendered video file showing the full solution 
 - `18:26:42` shell: `cat >> NOTES.md <<'EOF'`
 - `18:27:19` shell: `tail -3 videos.log; tail -4 evaluation.log; /usr/local/bin/python - <<'PY'`
 - `18:27:33` shell: `kill 3370 3379 3380`
-- `18:27:33` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python experiment_home.py PackRack-v2 --seed 1000 --verbose > home_pack1000.log 2>&1`
+- `18:27:33` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python experiment_home.py PackRack-v2 --seed 1000 --verbose > home_pack1000.log 2>&1`
 **18:27:40 · agent:** More seeds exposed failures after tool use and during the four-box packing task. I’m testing a return to a central arm pose before each new grasp. I’ve paused recording while I check that change so the final clips show the settled controller.
 
 - `18:28:01` shell: `tail -6 home_lift2000.log; tail -8 home_pack1000.log; /usr/local/bin/python - <<'PY'`
@@ -213,16 +215,16 @@ final deliverable also included a rendered video file showing the full solution 
 - `18:29:15` shell: `cat > analyze_results.py <<'PY'`
 - `18:29:20` shell: `tail -7 home_lift2000.log; tail -10 home_pack1000.log`
 - `18:30:18` shell: `cp controllers.py experiment_recovery.py`
-- `18:30:18` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python experiment_recovery.py PackRack-v2 --seed 1000 --verbose > recover_pack1000.log 2>&1`
+- `18:30:18` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python experiment_recovery.py PackRack-v2 --seed 1000 --verbose > recover_pack1000.log 2>&1`
 - `18:30:28` shell: `/usr/local/bin/python - <<'PY'`
 - `18:30:50` shell: `tail -9 recover_pack1000.log; tail -7 recover_lift2000.log`
 - `18:31:31` shell: `cp controllers.py experiment_park.py`
 **18:32:03 · agent:** The remaining failures include inaccurate grasps near the edge of the arm’s reach and motions that stall after rotating the tool. I’m testing a modest wrist tilt for edge grasps and tool parking that preserves its heading, reducing the rotation needed after retrieval.
 
 - `18:32:11` shell: `cp controllers.py experiment_tilt.py`
-- `18:32:25` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python experiment_park.py LiftRedBox-v0 --seed 2000 --verbose > park_lift2000.log 2>&1`
+- `18:32:25` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python experiment_park.py LiftRedBox-v0 --seed 2000 --verbose > park_lift2000.log 2>&1`
 - `18:32:25` shell: `tail -3 recover_lift2000.log; tail -4 evaluation.log`
-- `18:32:46` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python experiment_recovery.py RedBoxOnRack-v0 --seed 2000 --verbose > recover_on2000.log 2>&1`
+- `18:32:46` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python experiment_recovery.py RedBoxOnRack-v0 --seed 2000 --verbose > recover_on2000.log 2>&1`
 - `18:32:46` shell: `tail -5 park_lift2000.log; /usr/local/bin/python - <<'PY'`
 - `18:33:10` shell: `tail -6 park_lift2000.log; tail -4 recover_on2000.log; /usr/local/bin/python analyze_results.py --output failure_analysis_partial.json | head -16`
 **18:33:16 · agent:** A recovery motion that preserves the measured wrist orientation while moving upward and inward solved the stalled four-box packing test and a failed lift test. Simply commanding a fixed upright wrist pose had not worked. I’m checking the same recovery on rack placement before integrating it.
@@ -276,7 +278,7 @@ final deliverable also included a rendered video file showing the full solution 
 - `18:48:05` shell: `sha256sum controllers.py development/controllers_v9.py`
 **18:48:14 · agent:** The straight-pull change solved the failing under-rack diagnostic. I’ve integrated it and will rerun both under-rack variants. Results for the other seven variants are retained: the only controller change is conditional on an under-rack task, and the validation code verifies that exact one-line difference. Raw results keep their original source hashes.
 
-- `18:48:29` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python record_videos.py --workers 2 --resume >> videos.log 2>&1`
+- `18:48:29` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python record_videos.py --workers 2 --resume >> videos.log 2>&1`
 - `18:48:29` shell: `/usr/local/bin/python - <<'PY'`
 - `18:48:54` shell: `/usr/local/bin/python - <<'PY'`
 - `18:50:08` shell: `/usr/local/bin/python - <<'PY'`
@@ -309,7 +311,7 @@ final deliverable also included a rendered video file showing the full solution 
 - `19:01:55` shell: `cat controllers.py`
 - `19:02:04` shell: `cat tool_control.py; cat analyze_results.py; cat write_report.py`
 - `19:02:14` shell: `/usr/local/bin/python - <<'PY'`
-- `19:02:14` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python development/experiment_under_recover.py RedBoxUnderRack-v1 --seed 3000 --verbose > development/under_recover3000.log`
+- `19:02:14` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python development/experiment_under_recover.py RedBoxUnderRack-v1 --seed 3000 --verbose > development/under_recover3000.log`
 - `19:02:24` shell: `cat record_videos.py; cat evaluate.py`
 - `19:02:36` shell: `/usr/local/bin/python - <<'PY'`
 - `19:02:43` shell: `tail -n 8 development/under_recover3000.log; cat README.md; cat audit_interface.py`
@@ -328,7 +330,7 @@ final deliverable also included a rendered video file showing the full solution 
 - `19:05:03` shell: `tail -n 4 development/under_recover3000.log; /usr/local/bin/python - <<'PY'`
 - `19:05:07` shell: `/usr/local/bin/python - <<'PY'`
 - `19:06:03` shell: `tail -n 2 development/under_recover3000.log; tail -n 2 evaluation.log`
-- `19:06:08` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python development/experiment_under_axis.py RedBoxUnderRack-v1 --seed 3000 --verbose > development/under_axis3000.log`
+- `19:06:08` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python development/experiment_under_axis.py RedBoxUnderRack-v1 --seed 3000 --verbose > development/under_axis3000.log`
 **19:06:17 · agent:** The remaining evaluation seeds have exposed two packing failures as well: one box fell off the table, and another remained outside the rack. These will be documented separately from the under-rack issue. The rendered clips look correct on inspection, including task/seed labels and step counters.
 
 - `19:06:22` shell: `/usr/local/bin/python - <<'PY'`
@@ -345,8 +347,8 @@ final deliverable also included a rendered video file showing the full solution 
 - `19:09:50` shell: `/usr/local/bin/python - <<'PY'`
 **19:09:56 · agent:** The seven-task evaluation is nearly complete: 135 of 139 finished episodes have succeeded. The last episode is still running. The next batch will evaluate both under-rack variants on all 20 seeds each; video recording continues in parallel within the CPU and memory limits.
 
-- `19:10:01` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python - <<'PY'`
-- `19:10:14` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python - <<'PY'`
+- `19:10:01` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python - <<'PY'`
+- `19:10:14` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python - <<'PY'`
 - `19:10:37` shell: `/usr/local/bin/python - <<'PY'`
 - `19:10:42` shell: `tail -n 5 evaluation.log; tail -n 4 evaluation_under.log; tail -n 2 videos_remaining.log`
 - `19:10:49` shell: `/usr/local/bin/python analyze_results.py > development/nonunder_failure_analysis.txt`
@@ -359,13 +361,13 @@ final deliverable also included a rendered video file showing the full solution 
 
 - `19:12:33` shell: `ffmpeg -v error -y -sseof -2 -i videos/PackRack-v0_seed71097.mp4 -frames:v 1 development/pack71097_final.png`
 - `19:12:42` shell: `ffmpeg -v error -y -ss 20 -i videos/PackRack-v0_seed71097.mp4 -frames:v 1 development/pack71097_mid.png`
-- `19:12:48` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python controllers.py PackRack-v0 --seed 71097 --verbose > development/pack71097_replay.log`
+- `19:12:48` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python controllers.py PackRack-v0 --seed 71097 --verbose > development/pack71097_replay.log`
 - `19:12:58` shell: `tail -n 3 evaluation_under.log; tail -n 2 videos_remaining.log; tail -n 3 development/pack71097_replay.log`
 - `19:14:11` shell: `tail -n 4 evaluation_under.log; tail -n 4 development/pack71097_replay.log; tail -n 2 videos_remaining.log; tail -n 1 videos.log`
 **19:14:32 · agent:** The failed packing video points to a reach-limit problem: a box near the edge of the top-down grasp range leaves the arm nearly straight, and the return motion stalls. I’m testing an earlier angled grasp on that scene while the main evaluation continues. The under-rack batch has also confirmed a remaining rack-collision failure on seed 0.
 
 - `19:14:36` shell: `/usr/local/bin/python - <<'PY'`
-- `19:14:40` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python development/experiment_pack_tilt.py PackRack-v0 --seed 71097 --verbose > development/pack_tilt71097.log`
+- `19:14:40` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python development/experiment_pack_tilt.py PackRack-v0 --seed 71097 --verbose > development/pack_tilt71097.log`
 - `19:14:51` shell: `/usr/local/bin/python - <<'PY'`
 - `19:15:56` shell: `tail -n 5 development/pack_tilt71097.log; tail -n 3 evaluation_under.log; tail -n 1 videos_remaining.log`
 **19:16:09 · agent:** The earlier angled grasp did not solve the packing failure: it retrieved the box, but the placement still stalled and exhausted the episode limit. I’m leaving that experimental change out. The final report will distinguish tested improvements from unsuccessful trials and include the remaining reach and contact failures.
@@ -375,14 +377,14 @@ final deliverable also included a rendered video file showing the full solution 
 **19:16:59 · agent:** Recording is now the slowest part of the work. I’m moving the remaining clips to three CPU workers and reducing the internal render resolution to 256 pixels, while retaining every action frame and the same labeled video size. Completed clips will be kept; only unfinished clips will restart.
 
 - `19:17:06` shell: `/usr/local/bin/python - <<'PY'`
-- `19:17:06` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python record_videos.py --workers 3 --resume >> videos_final.log 2>&1`
+- `19:17:06` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python record_videos.py --workers 3 --resume >> videos_final.log 2>&1`
 - `19:17:15` shell: `/usr/local/bin/python - <<'PY'`
 - `19:18:19` shell: `tail -n 4 evaluation_under.log; tail -n 3 videos_final.log`
 **19:18:26 · agent:** UnderRack-v0 remains successful on every completed evaluation seed. UnderRack-v1 is still the weakest task: the tool-only clearance check cannot prevent every arm/rack collision or wrist stall. I’m reviewing the failed final states while the fixed-seed batch and recordings finish, so the report can state the limitation precisely.
 
 - `19:18:29` shell: `/usr/local/bin/python - <<'PY'`
 - `19:18:54` shell: `/usr/local/bin/python - <<'PY'`
-- `19:19:01` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python development/experiment_under_longpull.py RedBoxUnderRack-v1 --seed 3000 --verbose > development/under_long3000.log`
+- `19:19:01` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python development/experiment_under_longpull.py RedBoxUnderRack-v1 --seed 3000 --verbose > development/under_long3000.log`
 - `19:19:45` shell: `cat > validate_deliverables.py <<'PY'`
 **19:19:51 · agent:** The final checks are prepared: they will verify all nine runnable programs, 20 distinct evaluation scenes per task, five video seeds per task, and the frame count of every clip and the combined video. I’m also testing whether a longer inward tool pull can avoid the difficult angled re-grasp in UnderRack-v1.
 
@@ -392,12 +394,12 @@ final deliverable also included a rendered video file showing the full solution 
 
 - `19:21:41` shell: `/usr/local/bin/python - <<'PY'`
 - `19:22:41` shell: `/usr/local/bin/python - <<'PY'`
-- `19:22:59` shell: `rg -n 'clip|workspace|action_space|pos_limits|absolute' /opt/RoboEnvs/roboenvs/env.py /opt/RoboEnvs/roboenvs/scene.py`
+- `19:22:59` shell: `rg -n 'clip|workspace|action_space|pos_limits|absolute' /opt/LongHorizonTAMP/longhorizontamp/env.py /opt/LongHorizonTAMP/longhorizontamp/scene.py`
 **19:24:04 · agent:** The longer-pull trial did not solve the difficult insertion, so it will remain a documented experiment rather than enter the final controller. The delivered policy is now fixed. I’m finishing the evaluation, recordings, and artifact checks; the results will explicitly identify where it falls short.
 
 - `19:24:06` shell: `tail -n 6 evaluation_under.log; tail -n 3 videos_final.log; tail -n 2 development/under_long0.log`
 - `19:24:19` shell: `/usr/local/bin/python - <<'PY'`
-- `19:24:29` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python evaluate.py --workers 2 --resume --output results_under_final.jsonl --env RedBoxUnderRack-v0 RedBoxUnderRack-v1 >> evaluation_under.log 2>&1`
+- `19:24:29` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python evaluate.py --workers 2 --resume --output results_under_final.jsonl --env RedBoxUnderRack-v0 RedBoxUnderRack-v1 >> evaluation_under.log 2>&1`
 - `19:24:46` shell: `tail -n 1 development/under_long0.log; /usr/local/bin/python - <<'PY'`
 **19:25:05 · agent:** The first evaluation process ended with two episodes unfinished, so I’ve resumed only those missing seeds. UnderRack-v0 finished at 20/20; UnderRack-v1 has 10 successes among 18 completed runs. The resumed episodes will determine its final rate. No incomplete run is being counted as a result.
 
@@ -412,7 +414,7 @@ final deliverable also included a rendered video file showing the full solution 
 **19:28:34 · agent:** The evaluation is complete: **166/180 successes (92.2%)**. Six environments scored 20/20; BlueSpot-v1 scored 17/20, PackRack-v2 18/20, and UnderRack-v1 11/20. I’m merging the results and using the freed CPUs to finish the remaining videos, then I’ll validate the combined file and write the final report.
 
 - `19:28:45` shell: `/usr/local/bin/python - <<'PY'`
-- `19:28:45` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python record_videos.py --workers 6 --resume >> videos_final.log 2>&1`
+- `19:28:45` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python record_videos.py --workers 6 --resume >> videos_final.log 2>&1`
 - `19:28:54` shell: `cat failure_summary.txt; cat results.jsonl.summary.json`
 - `19:29:06` shell: `/usr/local/bin/python - <<'PY'`
 - `19:29:14` shell: `/usr/local/bin/python - <<'PY'`
@@ -421,7 +423,7 @@ final deliverable also included a rendered video file showing the full solution 
 
 - `19:30:51` shell: `/usr/local/bin/python - <<'PY'`
 - `19:30:59` shell: `/usr/local/bin/python - <<'PY'`
-- `19:31:10` shell: `rg -n 'camera|render' /opt/RoboEnvs/README.md /opt/RoboEnvs/roboenvs/env.py /opt/RoboEnvs/roboenvs/scene.py`
+- `19:31:10` shell: `rg -n 'camera|render' /opt/LongHorizonTAMP/README.md /opt/LongHorizonTAMP/longhorizontamp/env.py /opt/LongHorizonTAMP/longhorizontamp/scene.py`
 - `19:32:32` shell: `/usr/local/bin/python - <<'PY'`
 **19:32:51 · agent:** **43 of 45 videos are complete**, with 39 successful runs. The last two are four-box packing episodes. After they finish, I’ll assemble the chaptered video, verify its frames, and generate `RESULTS.md` with the final rates and failure details.
 
@@ -429,10 +431,10 @@ final deliverable also included a rendered video file showing the full solution 
 - `19:34:02` shell: `tail -n 3 videos_final.log`
 **19:34:09 · agent:** All **45 videos are complete: 41 successes and four failed attempts**. I’m assembling the combined video and running the final checks now. The report will include every evaluation failure and identify the four failed video seeds.
 
-- `19:34:11` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python assemble_videos.py`
+- `19:34:11` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python assemble_videos.py`
 - `19:34:35` shell: `/usr/local/bin/python - <<'PY'`
-- `19:34:42` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python write_report.py`
-- `19:34:42` shell: `PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python validate_deliverables.py > validation.log 2>&1`
+- `19:34:42` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python write_report.py`
+- `19:34:42` shell: `PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python validate_deliverables.py > validation.log 2>&1`
 - `19:34:42` shell: `ffmpeg -v error -threads 1 -i solutions_demo.mp4 -f null - > video_decode.log 2>&1`
 - `19:34:52` shell: `cat RESULTS.md`
 - `19:34:52` shell: `/usr/local/bin/python - <<'PY'`

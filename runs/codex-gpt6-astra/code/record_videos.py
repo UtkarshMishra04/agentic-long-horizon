@@ -11,7 +11,7 @@ os.environ.setdefault('OPENBLAS_NUM_THREADS', '1')
 os.environ.setdefault('OMP_NUM_THREADS', '1')
 import numpy as np
 from PIL import Image, ImageDraw
-import roboenvs
+import longhorizontamp
 from controllers import Controller, ORDERS
 from revision_compat import compatible
 SOURCE_SHA256=hashlib.sha256(open(os.path.join(os.path.dirname(__file__),"controllers.py"),"rb").read()).hexdigest()
@@ -45,7 +45,7 @@ class Video:
 def record(job):
     name, seed, directory = job
     path = os.path.join(directory, '%s_seed%d.mp4' % (name,seed))
-    env = roboenvs.make('roboenvs/'+name,control='absolute',cameras=('agentview',),image_size=256)
+    env = longhorizontamp.make('LongHorizonTAMP/'+name,control='absolute',cameras=('agentview',),image_size=256)
     video = None
     try:
         ob, info = env.reset(seed=seed)

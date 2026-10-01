@@ -6,12 +6,12 @@ import runpy
 import subprocess
 from pathlib import Path
 import numpy as np
-import roboenvs
+import longhorizontamp
 from controllers import ORDERS
 from revision_compat import compatible
 
 root=Path(__file__).resolve().parent
-assert set(roboenvs.ENV_IDS)=={'roboenvs/'+name for name in ORDERS}
+assert set(longhorizontamp.ENV_IDS)=={'LongHorizonTAMP/'+name for name in ORDERS}
 files=list(root.glob('*.py'))+list((root/'solutions').glob('*.py'))
 for path in files:py_compile.compile(str(path),doraise=True)
 runpy.run_path(str(root/'audit_interface.py'),run_name='__main__')
@@ -31,7 +31,7 @@ expected_video_seeds={name:set(map(int,rng.choice(1000000,5,replace=False))) for
 summary={}
 for name in ORDERS:
     assert (root/'solutions'/(name+'.py')).is_file()
-    group=[r for r in rows if r['env']=='roboenvs/'+name]
+    group=[r for r in rows if r['env']=='LongHorizonTAMP/'+name]
     videos=[r for r in clips if r['env']==name]
     assert len(group)==20 and {r['seed'] for r in group}==set(range(0,20000,1000))
     assert len({r['scene_seed'] for r in group})==20

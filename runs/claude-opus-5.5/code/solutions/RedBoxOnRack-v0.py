@@ -1,4 +1,4 @@
-"""Solution for roboenvs/RedBoxOnRack-v0 (run: python RedBoxOnRack-v0.py --seed 0 [--video out.gif]).
+"""Solution for LongHorizonTAMP/RedBoxOnRack-v0 (run: python RedBoxOnRack-v0.py --seed 0 [--video out.gif]).
 
 The red box starts beyond reach: pull it in with the L-stick, park the stick, then pick the box and
 place it on the centre of the rack top.
@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import Skills, main  # noqa: E402
 from tool_common import REACH_R, fetch_far_box  # noqa: E402
 
-ENV_ID = "roboenvs/RedBoxOnRack-v0"
+ENV_ID = "LongHorizonTAMP/RedBoxOnRack-v0"
 
 
 def solve(a):

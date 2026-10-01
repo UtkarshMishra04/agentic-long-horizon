@@ -1,5 +1,7 @@
 # Claude Code (Opus 5.5, medium effort)
 
+> **Naming.** Environment identifiers in this agent's code and log were updated to the release names (package `longhorizontamp`, ids `LongHorizonTAMP/<Task>`); nothing else was changed.
+
 Claude Code 2.1.285 with `--dangerously-skip-permissions`, in the container from `docker/`. Given the task as one
 message (see `prompts/claude_as_given.md`). Worked 9 h 44 min (2026-09-30 20:56 – 2026-10-01 06:40 UTC), 256 tool
 calls, 823k output tokens.

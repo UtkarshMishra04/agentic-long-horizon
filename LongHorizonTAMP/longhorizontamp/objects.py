@@ -12,8 +12,8 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 import numpy as np
 from robosuite.models.objects import BoxObject, CompositeObject, MujocoObject
 
-from roboenvs import geometry
-from roboenvs.geometry import TABLE_CONSTRAINTS, Pose, TableFrame, quat_wxyz_to_xyzw, quat_xyzw_to_wxyz
+from longhorizontamp import geometry
+from longhorizontamp.geometry import TABLE_CONSTRAINTS, Pose, TableFrame, quat_wxyz_to_xyzw, quat_xyzw_to_wxyz
 
 OBJECT_STATE_DIM = 12
 

@@ -1,17 +1,17 @@
 # Claude Code: prompt as given (one message). Time UTC.
 
 [20:56 UTC]
-Write Python code that solves the 9 robot manipulation environments in /opt/RoboEnvs.
+Write Python code that solves the 9 robot manipulation environments in /opt/LongHorizonTAMP.
 
 Environments
-- Code and documentation: /opt/RoboEnvs (read-only). Read /opt/RoboEnvs/README.md first; the package source is in /opt/RoboEnvs/roboenvs.
-- Python: /usr/local/bin/python (3.8), with roboenvs importable (PYTHONPATH=/opt/RoboEnvs). Rendering is headless with MUJOCO_GL=osmesa (already set). 10 CPU cores, no GPU.
-- The environments are listed in roboenvs.ENV_IDS. Each has reset(seed), get_state(), get_goal(), step(action), render() and close(). The reward is 1.0 when the goal is reached.
+- Code and documentation: /opt/LongHorizonTAMP (read-only). Read /opt/LongHorizonTAMP/README.md first; the package source is in /opt/LongHorizonTAMP/longhorizontamp.
+- Python: /usr/local/bin/python (3.8), with longhorizontamp importable (PYTHONPATH=/opt/LongHorizonTAMP). Rendering is headless with MUJOCO_GL=osmesa (already set). 10 CPU cores, no GPU.
+- The environments are listed in longhorizontamp.ENV_IDS. Each has reset(seed), get_state(), get_goal(), step(action), render() and close(). The reward is 1.0 when the goal is reached.
 
 Rules
 - No approach that requires training or a GPU: no learning from data, no neural networks, no reinforcement learning, no fitting models to rollouts. Plain Python code you write (numpy is fine).
 - Your solutions may interact with an environment only through its public interface: reset, get_state, get_goal, step, render, and the action_space / observation_space attributes. You may read the source to understand the environments, but do not call private members (names starting with _) or the simulator directly.
-- Work only in /workspace/claude/; create it and put all code, videos, notes and results there. Do not read /home/agent/.codex/ or anything outside /opt/RoboEnvs and /workspace/claude/ that relates to other agents.
+- Work only in /workspace/claude/; create it and put all code, videos, notes and results there. Do not read /home/agent/.codex/ or anything outside /opt/LongHorizonTAMP and /workspace/claude/ that relates to other agents.
 
 Deliverables
 1. Code: for each environment, a Python solution /workspace/claude/solutions/<env_name>.py that creates the environment and, from what reset/get_state/get_goal return, computes the actions and sends them with step() until the goal is reached. Each must run with one command.

@@ -14,8 +14,8 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Sequence, Tuple, Ty
 import numpy as np
 from shapely.geometry import LineString, Polygon
 
-from roboenvs import geometry
-from roboenvs.geometry import (
+from longhorizontamp import geometry
+from longhorizontamp.geometry import (
     EPSILONS,
     INTERSECTION_THRESHOLD,
     LIFT_HEIGHT,
@@ -23,11 +23,11 @@ from roboenvs.geometry import (
     Pose,
     parse_proposition,
 )
-from roboenvs.objects import object_state_range
+from longhorizontamp.objects import object_state_range
 
 if TYPE_CHECKING:
-    from roboenvs.objects import SceneObject
-    from roboenvs.scene import TabletopScene as TableEnv
+    from longhorizontamp.objects import SceneObject
+    from longhorizontamp.scene import TabletopScene as TableEnv
 
 
 PLACEMENT_CLEARANCE = 0.005

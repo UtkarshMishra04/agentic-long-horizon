@@ -2,3 +2,11 @@ __pycache__/
 *.pyc
 .DS_Store
 *.egg-info/
+# never commit agent logins or credentials
+.claude/
+.codex/
+auth.json
+.credentials.json
+.env
+*.pem
+*.key

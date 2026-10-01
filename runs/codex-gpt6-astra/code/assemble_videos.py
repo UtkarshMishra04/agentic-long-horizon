@@ -29,7 +29,7 @@ if __name__ == '__main__':
     listing=directory/'concat.txt'
     listing.write_text(''.join("file '%s'\n" % Path(r['video']).resolve() for r in records))
     metadata=directory/'chapters.ffmetadata'
-    chapters=[';FFMETADATA1','title=RoboEnvs deterministic controller demonstrations']
+    chapters=[';FFMETADATA1','title=LongHorizonTAMP deterministic controller demonstrations']
     start=0
     for row in records:
         end=start+row['frames']*50

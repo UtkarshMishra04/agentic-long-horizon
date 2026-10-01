@@ -1,5 +1,5 @@
 #!/bin/bash
-# Persistent roboenvs container: it keeps running in the background, so tmux sessions inside it survive
+# Persistent longhorizontamp container: it keeps running in the background, so tmux sessions inside it survive
 # closing the terminal. Every call attaches to (or creates) the tmux session "main".
 #   docker/run.sh              # attach to tmux session "main" (detach: Ctrl-b d)
 #   docker/run.sh claude       # attach to tmux session "claude" running Claude Code
@@ -8,10 +8,10 @@
 #   docker/run.sh --stop       # stop and remove the container (tmux sessions end)
 # Both CLIs run without permission prompts (--dangerously-skip-permissions /
 # --dangerously-bypass-approvals-and-sandbox; Codex also --no-daemon): the container is the sandbox.
-# WORKSPACE (default ~/roboenvs_workspace) is mounted read-write at /workspace. Claude Code and Codex
-# logins persist in the named volumes roboenvs-claude and roboenvs-codex.
-NAME=roboenvs
-WORKSPACE="${WORKSPACE:-$HOME/roboenvs_workspace}"
+# WORKSPACE (default ~/longhorizontamp_workspace) is mounted read-write at /workspace. Claude Code and Codex
+# logins persist in the named volumes longhorizontamp-claude and longhorizontamp-codex.
+NAME=longhorizontamp
+WORKSPACE="${WORKSPACE:-$HOME/longhorizontamp_workspace}"
 
 if [ "$1" = "--stop" ]; then
   docker rm -f "$NAME" >/dev/null && echo "stopped $NAME"
@@ -23,9 +23,9 @@ if [ -z "$(docker ps -q -f name="^${NAME}$")" ]; then
   mkdir -p "$WORKSPACE"
   docker run -d --name "$NAME" --init \
     -v "$WORKSPACE":/workspace \
-    -v roboenvs-claude:/home/agent/.claude \
-    -v roboenvs-codex:/home/agent/.codex \
-    roboenvs sleep infinity >/dev/null
+    -v longhorizontamp-claude:/home/agent/.claude \
+    -v longhorizontamp-codex:/home/agent/.codex \
+    longhorizontamp sleep infinity >/dev/null
 fi
 
 if [ $# -eq 0 ]; then

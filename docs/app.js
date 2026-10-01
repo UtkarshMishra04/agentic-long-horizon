@@ -1,7 +1,7 @@
-/* Interactive page for the RoboEnvs agent runs. No dependencies; works from file:// (data is loaded as scripts). */
+/* Interactive page for the LongHorizonTAMP agent runs. No dependencies; works from file:// (data is loaded as scripts). */
 (function () {
   "use strict";
-  const GITHUB_URL = "https://github.com/OWNER/roboenvs-agents";  // TODO: set to the public repository
+  const GITHUB_URL = "https://github.com/UtkarshMishra04/agentic-long-horizon";
   const S = window.SUMMARY, CAT = window.CATALOG, RUNS = window.RUNS, DIFFS = window.DIFFS;
   const AG = { codex: { name: "Codex", color: "var(--codex)", hex: "#2a78d6" }, claude: { name: "Claude", color: "var(--claude)", hex: "#eb6834" } };
   const OBJ_COLOR = { red_box: "#e34948", blue_box: "#2a78d6", yellow_box: "#eda100", cyan_box: "#1baf7a", lstick: "#4a3aa7", rack: "#898781" };
@@ -487,7 +487,7 @@
 
   // ------------------------------------------------------------------ wire up
   tiles(); taskTable(); resultsTable();
-  $("#envcode").href = GITHUB_URL + "/tree/main/RoboEnvs";
+  $("#envcode").href = GITHUB_URL + "/tree/main/LongHorizonTAMP";
   videoExplorer(); iterations(); if ($("#logs")) logs(); codeBrowser();
   let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { players.forEach((p) => { if (p.ep) { p.buildMap(); p.draw(); } }); }, 200); });
 })();

@@ -13,33 +13,33 @@ import gym
 import numpy as np
 from robosuite.utils import transform_utils as T
 
-from roboenvs import predicates
-from roboenvs.geometry import LIFT_HEIGHT
-from roboenvs.scene import TabletopScene, load_yaml
+from longhorizontamp import predicates
+from longhorizontamp.geometry import LIFT_HEIGHT
+from longhorizontamp.scene import TabletopScene, load_yaml
 
 ENV_IDS: Dict[str, str] = {
-    "roboenvs/LiftRedBox-v0": "tasks/lift_red_box.yaml",
-    "roboenvs/RedBoxOnRack-v0": "tasks/red_box_on_rack.yaml",
-    "roboenvs/RedBoxUnderRack-v0": "tasks/red_box_under_rack_0.yaml",
-    "roboenvs/RedBoxUnderRack-v1": "tasks/red_box_under_rack_1.yaml",
-    "roboenvs/RedBoxToBlueSpot-v0": "tasks/red_box_to_blue_spot_0.yaml",
-    "roboenvs/RedBoxToBlueSpot-v1": "tasks/red_box_to_blue_spot_1.yaml",
-    "roboenvs/PackRack-v0": "tasks/pack_rack_0.yaml",
-    "roboenvs/PackRack-v1": "tasks/pack_rack_1.yaml",
-    "roboenvs/PackRack-v2": "tasks/pack_rack_2.yaml",
+    "LongHorizonTAMP/LiftRedBox-v0": "tasks/lift_red_box.yaml",
+    "LongHorizonTAMP/RedBoxOnRack-v0": "tasks/red_box_on_rack.yaml",
+    "LongHorizonTAMP/RedBoxUnderRack-v0": "tasks/red_box_under_rack_0.yaml",
+    "LongHorizonTAMP/RedBoxUnderRack-v1": "tasks/red_box_under_rack_1.yaml",
+    "LongHorizonTAMP/RedBoxToBlueSpot-v0": "tasks/red_box_to_blue_spot_0.yaml",
+    "LongHorizonTAMP/RedBoxToBlueSpot-v1": "tasks/red_box_to_blue_spot_1.yaml",
+    "LongHorizonTAMP/PackRack-v0": "tasks/pack_rack_0.yaml",
+    "LongHorizonTAMP/PackRack-v1": "tasks/pack_rack_1.yaml",
+    "LongHorizonTAMP/PackRack-v2": "tasks/pack_rack_2.yaml",
 }
 """Environment id -> scene file (inside the package)."""
 
 MAX_EPISODE_STEPS: Dict[str, int] = {
-    "roboenvs/LiftRedBox-v0": 1500,
-    "roboenvs/RedBoxOnRack-v0": 1800,
-    "roboenvs/RedBoxUnderRack-v0": 1300,
-    "roboenvs/RedBoxUnderRack-v1": 2500,
-    "roboenvs/RedBoxToBlueSpot-v0": 1000,
-    "roboenvs/RedBoxToBlueSpot-v1": 2400,
-    "roboenvs/PackRack-v0": 1000,
-    "roboenvs/PackRack-v1": 1600,
-    "roboenvs/PackRack-v2": 2000,
+    "LongHorizonTAMP/LiftRedBox-v0": 1500,
+    "LongHorizonTAMP/RedBoxOnRack-v0": 1800,
+    "LongHorizonTAMP/RedBoxUnderRack-v0": 1300,
+    "LongHorizonTAMP/RedBoxUnderRack-v1": 2500,
+    "LongHorizonTAMP/RedBoxToBlueSpot-v0": 1000,
+    "LongHorizonTAMP/RedBoxToBlueSpot-v1": 2400,
+    "LongHorizonTAMP/PackRack-v0": 1000,
+    "LongHorizonTAMP/PackRack-v1": 1600,
+    "LongHorizonTAMP/PackRack-v2": 2000,
 }
 """Default time limit per environment (control steps at 20 Hz)."""
 

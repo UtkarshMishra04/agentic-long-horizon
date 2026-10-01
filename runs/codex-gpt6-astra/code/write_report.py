@@ -27,13 +27,13 @@ methods={
  'PackRack-v1':'Pick and place blue, yellow, and cyan into separated rack-frame slots, checking object height between attempts.',
  'PackRack-v2':'Use the same four-slot packing strategy for blue, yellow, red, and cyan.'}
 limits=[1500,1800,1300,2500,1000,2400,1000,1600,2000]
-lines=['# RoboEnvs controller results','',
+lines=['# LongHorizonTAMP controller results','',
        'All nine solutions are hand-written Python state-feedback controllers. They use only public reset/state/goal/step data for control, with no training, learned models, rollout fitting, GPU, simulator access, or private environment members. NumPy, SciPy rotation utilities, and Shapely geometry are used for deterministic calculations.','',
        '## Evaluation','',
        'The authoritative run uses requested seeds **0, 1000, …, 19000**, the environment’s default episode limits, and CPU-only rendering. A success is the environment returning `terminated=True`; the controller does not substitute its own goal test. Requested and actual scene seeds are retained because reset can skip invalid scenes. Diagnostic batches are excluded.','',
        '| Environment | Successes | Rate | Distinct actual scenes | Default step limit |','|---|---:|---:|---:|---:|']
 for name,limit in zip(ORDERS,limits):
-    group=[r for r in records if r['env']=='roboenvs/'+name]
+    group=[r for r in records if r['env']=='LongHorizonTAMP/'+name]
     assert len(group)>=20 and len({r['seed'] for r in group})>=20
     assert len({r['scene_seed'] for r in group})>=20
     successes=sum(r['success'] for r in group)
@@ -51,7 +51,7 @@ if not failures:lines+=['No failures occurred in the 180-episode evaluation. Thi
 else:
     lines+=['The following are failed requested seeds and evidence from their final public states. Full per-episode details are in [failure_analysis.json](failure_analysis.json).', '', '| Environment | Failed requested seeds | Final-state evidence |','|---|---|---|']
     for name in ORDERS:
-        group=[r for r in failures if r['env']=='roboenvs/'+name]
+        group=[r for r in failures if r['env']=='LongHorizonTAMP/'+name]
         if group:
             evidence=list(dict.fromkeys(message for r in group for message in reasons(r)))
             lines.append('| %s | %s | %s |'%(name,', '.join(str(r['seed']) for r in group),'; '.join(evidence)))
@@ -71,11 +71,11 @@ video_failures=[r for r in clips if not r['success']]
 if video_failures:
     lines+=['', 'Failed video seeds: '+ '; '.join('%s: %s'%(name,', '.join(str(r['seed']) for r in video_failures if r['env']==name)) for name in ORDERS if any(r['env']==name for r in video_failures))+'.']
 lines+=['','## Run the solutions','', 'From `/workspace`:', '', '```bash']
-for name in ORDERS:lines.append('PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python solutions/%s.py --seed %d'%(name,1000 if name=='RedBoxUnderRack-v1' else 0))
+for name in ORDERS:lines.append('PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python solutions/%s.py --seed %d'%(name,1000 if name=='RedBoxUnderRack-v1' else 0))
 lines+=['```','', 'Reproduce evaluation and videos:', '', '```bash',
- 'PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python evaluate.py --workers 6 --output /workspace/results.jsonl',
- 'PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python record_videos.py --workers 2',
- 'PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python assemble_videos.py',
- '```','', 'Validation: Python compilation; static audit of environment attribute access; full episode evaluation; and ffprobe checks of all 45 video resolutions/frame counts plus the combined frame total and 45 chapter markers; and a full decode of the combined video with no errors. Environment source under `/opt/RoboEnvs` was read, not modified.']
+ 'PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python evaluate.py --workers 6 --output /workspace/results.jsonl',
+ 'PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python record_videos.py --workers 2',
+ 'PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python assemble_videos.py',
+ '```','', 'Validation: Python compilation; static audit of environment attribute access; full episode evaluation; and ffprobe checks of all 45 video resolutions/frame counts plus the combined frame total and 45 chapter markers; and a full decode of the combined video with no errors. Environment source under `/opt/LongHorizonTAMP` was read, not modified.']
 (root/'RESULTS.md').write_text('\n'.join(lines)+'\n')
 print(root/'RESULTS.md')

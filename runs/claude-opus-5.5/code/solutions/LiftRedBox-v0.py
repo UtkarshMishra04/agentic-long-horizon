@@ -1,4 +1,4 @@
-"""Solution for roboenvs/LiftRedBox-v0 (run: python LiftRedBox-v0.py --seed 0 [--video out.gif]).
+"""Solution for LongHorizonTAMP/LiftRedBox-v0 (run: python LiftRedBox-v0.py --seed 0 [--video out.gif]).
 
 The red box starts beyond reach: pull it in with the L-stick, park the stick, grasp and lift the box.
 """
@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import Skills, main  # noqa: E402
 from tool_common import REACH_R, fetch_far_box  # noqa: E402
 
-ENV_ID = "roboenvs/LiftRedBox-v0"
+ENV_ID = "LongHorizonTAMP/LiftRedBox-v0"
 
 
 def solve(a):

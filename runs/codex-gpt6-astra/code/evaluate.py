@@ -1,6 +1,6 @@
 """Evaluate all nine hand-written controllers using default episode limits.
 
-Example: PYTHONPATH=/opt/RoboEnvs /usr/local/bin/python evaluate.py --seeds 20
+Example: PYTHONPATH=/opt/LongHorizonTAMP /usr/local/bin/python evaluate.py --seeds 20
 """
 import argparse
 import concurrent.futures
@@ -21,7 +21,7 @@ def job(args):
     try:
         result = episode(name, seed)
     except Exception as exc:
-        result = dict(env='roboenvs/' + name, seed=seed, success=False, error=repr(exc))
+        result = dict(env='LongHorizonTAMP/' + name, seed=seed, success=False, error=repr(exc))
     result['seconds'] = round(time.monotonic() - started, 3)
     return result
 
@@ -56,7 +56,7 @@ if __name__ == '__main__':
             print(json.dumps({k: v for k, v in result.items() if k not in ('final_objects','goal')}), flush=True)
     summary = {}
     for env in args.env:
-        records = [r for r in results if r['env'] == 'roboenvs/' + env]
+        records = [r for r in results if r['env'] == 'LongHorizonTAMP/' + env]
         successes = sum(r['success'] for r in records)
         summary[env] = dict(successes=successes, episodes=len(records), success_rate=successes / len(records),
                             unique_scene_seeds=len({r.get('scene_seed') for r in records}))

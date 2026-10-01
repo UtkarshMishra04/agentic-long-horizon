@@ -4,7 +4,7 @@ os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 import numpy as np
 from scipy.spatial.transform import Rotation as R
-import roboenvs
+import longhorizontamp
 from shapely.geometry import Polygon, Point
 from shapely.ops import unary_union
 from tool_control import move_object
@@ -219,8 +219,8 @@ class Controller:
         except Done: return {'success':bool(self.success),'steps':self.steps}
 
 def episode(name,seed,verbose=False):
-    eid=name if '/' in name else 'roboenvs/'+name
-    env=roboenvs.make(eid,control='absolute',cameras=('agentview',),image_size=8)
+    eid=name if '/' in name else 'LongHorizonTAMP/'+name
+    env=longhorizontamp.make(eid,control='absolute',cameras=('agentview',),image_size=8)
     try:
         _,info=env.reset(seed=seed); c=Controller(env,eid,verbose); result=c.run(); result.update(env=eid,seed=seed,scene_seed=info['scene_seed'],final_objects={n:v.tolist() for n,v in c.state()[1].items()},goal=env.get_goal()); return result
     finally: env.close()

@@ -3,9 +3,9 @@ requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "roboenvs"
+name = "longhorizontamp"
 version = "1.0.0"
-description = "Tabletop manipulation environments on robosuite (MuJoCo)."
+description = "Long-horizon task and motion planning (TAMP) environments for a Franka Panda on robosuite (MuJoCo)."
 requires-python = ">=3.8"
 dependencies = [
   "numpy>=1.23,<2",
@@ -19,7 +19,7 @@ dependencies = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["roboenvs*"]
+include = ["longhorizontamp*"]
 
 [tool.setuptools.package-data]
-roboenvs = ["tasks/*.yaml", "assets/*.yaml"]
+longhorizontamp = ["tasks/*.yaml", "assets/*.yaml"]

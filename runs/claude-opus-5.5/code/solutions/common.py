@@ -1,4 +1,4 @@
-"""Shared scripted-control helpers for the RoboEnvs solutions.
+"""Shared scripted-control helpers for the LongHorizonTAMP solutions.
 
 Only the public environment interface is used: make/reset/get_state/get_goal/step/render.
 Actions use control="absolute": target end-effector position, axis-angle orientation, gripper.
@@ -14,21 +14,21 @@ import numpy as np
 
 warnings.filterwarnings("ignore")
 logging.disable(logging.WARNING)
-sys.path.insert(0, "/opt/RoboEnvs")
+sys.path.insert(0, "/opt/LongHorizonTAMP")
 os.environ.setdefault("MUJOCO_GL", "osmesa")
 
-import roboenvs  # noqa: E402
+import longhorizontamp  # noqa: E402
 
 OBJECTS = {
-    "roboenvs/LiftRedBox-v0": ["rack", "lstick", "red_box"],
-    "roboenvs/RedBoxOnRack-v0": ["rack", "lstick", "red_box"],
-    "roboenvs/RedBoxUnderRack-v0": ["rack", "lstick", "red_box"],
-    "roboenvs/RedBoxUnderRack-v1": ["rack", "lstick", "red_box"],
-    "roboenvs/RedBoxToBlueSpot-v0": ["lstick", "red_box", "blue_box"],
-    "roboenvs/RedBoxToBlueSpot-v1": ["lstick", "red_box", "blue_box"],
-    "roboenvs/PackRack-v0": ["rack", "yellow_box", "red_box", "cyan_box"],
-    "roboenvs/PackRack-v1": ["rack", "blue_box", "yellow_box", "cyan_box"],
-    "roboenvs/PackRack-v2": ["rack", "blue_box", "yellow_box", "red_box", "cyan_box"],
+    "LongHorizonTAMP/LiftRedBox-v0": ["rack", "lstick", "red_box"],
+    "LongHorizonTAMP/RedBoxOnRack-v0": ["rack", "lstick", "red_box"],
+    "LongHorizonTAMP/RedBoxUnderRack-v0": ["rack", "lstick", "red_box"],
+    "LongHorizonTAMP/RedBoxUnderRack-v1": ["rack", "lstick", "red_box"],
+    "LongHorizonTAMP/RedBoxToBlueSpot-v0": ["lstick", "red_box", "blue_box"],
+    "LongHorizonTAMP/RedBoxToBlueSpot-v1": ["lstick", "red_box", "blue_box"],
+    "LongHorizonTAMP/PackRack-v0": ["rack", "yellow_box", "red_box", "cyan_box"],
+    "LongHorizonTAMP/PackRack-v1": ["rack", "blue_box", "yellow_box", "cyan_box"],
+    "LongHorizonTAMP/PackRack-v2": ["rack", "blue_box", "yellow_box", "red_box", "cyan_box"],
 }
 BOX_SIZE = {"red_box": (0.05, 0.05, 0.07)}
 for _n in ("blue_box", "cyan_box", "yellow_box"):
@@ -133,7 +133,7 @@ class Done(Exception):
 class Agent:
     def __init__(self, env_id, seed, record=False, frame_every=3):
         self.env_id = env_id
-        self.env = roboenvs.make(env_id, control="absolute", cameras=("agentview",), image_size=16)
+        self.env = longhorizontamp.make(env_id, control="absolute", cameras=("agentview",), image_size=16)
         _, info = self.env.reset(seed=seed)
         self.scene_seed = info["scene_seed"]
         self.goal = self.env.get_goal()

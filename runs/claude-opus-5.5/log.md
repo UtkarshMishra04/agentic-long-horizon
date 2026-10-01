@@ -1,21 +1,23 @@
 # Claude Code (Opus 5.5, medium): key conversation log
 
+> **Naming.** Environment identifiers in this agent's code and log were updated to the release names (package `longhorizontamp`, ids `LongHorizonTAMP/<Task>`); nothing else was changed.
+
 Prompts, the agent's own narration, and the commands it ran (command output omitted). Times are UTC.
 
 
 ### 20:56:32 · user
 
-Write Python code that solves the 9 robot manipulation environments in /opt/RoboEnvs.
+Write Python code that solves the 9 robot manipulation environments in /opt/LongHorizonTAMP.
 
 Environments
-- Code and documentation: /opt/RoboEnvs (read-only). Read /opt/RoboEnvs/README.md first; the package source is in /opt/RoboEnvs/roboenvs.
-- Python: /usr/local/bin/python (3.8), with roboenvs importable (PYTHONPATH=/opt/RoboEnvs). Rendering is headless with MUJOCO_GL=osmesa (already set). 10 CPU cores, no GPU.
-- The environments are listed in roboenvs.ENV_IDS. Each has reset(seed), get_state(), get_goal(), step(action), render() and close(). The reward is 1.0 when the goal is reached.
+- Code and documentation: /opt/LongHorizonTAMP (read-only). Read /opt/LongHorizonTAMP/README.md first; the package source is in /opt/LongHorizonTAMP/longhorizontamp.
+- Python: /usr/local/bin/python (3.8), with longhorizontamp importable (PYTHONPATH=/opt/LongHorizonTAMP). Rendering is headless with MUJOCO_GL=osmesa (already set). 10 CPU cores, no GPU.
+- The environments are listed in longhorizontamp.ENV_IDS. Each has reset(seed), get_state(), get_goal(), step(action), render() and close(). The reward is 1.0 when the goal is reached.
 
 Rules
 - No approach that requires training or a GPU: no learning from data, no neural networks, no reinforcement learning, no fitting models to rollouts. Plain Python code you write (numpy is fine).
 - Your solutions may interact with an environment only through its public interface: reset, get_state, get_goal, step, render, and the action_space / observation_space attributes. You may read the source to understand the environments, but do not call private members (names starting with _) or the simulator directly.
-- Work only in /workspace/claude/; create it and put all code, videos, notes and results there. Do not read /home/agent/.codex/ or anything outside /opt/RoboEnvs and /workspace/claude/ that relates to other agents.
+- Work only in /workspace/claude/; create it and put all code, videos, notes and results there. Do not read /home/agent/.codex/ or anything outside /opt/LongHorizonTAMP and /workspace/claude/ that relates to other agents.
 
 Deliverables
 1. Code: for each environment, a Python solution /workspace/claude/solutions/<env_name>.py that creates the environment and, from what reset/get_state/get_goal return, computes the actions and sends them with step() until the goal is reached. Each must run with one command.
@@ -26,16 +28,16 @@ Deliverables
 
 Work autonomously until all deliverables are complete.
 
-- `20:56:36` Bash: `cat /opt/RoboEnvs/README.md; ls -R /opt/RoboEnvs | head -100; mkdir -p /workspace/claude`
-- `20:56:38` Bash: `cd /opt/RoboEnvs/roboenvs; wc -l *.py; cat assets/*.yaml tasks/*.yaml`
-- `20:56:38` Bash: `cd /opt/RoboEnvs/roboenvs; cat __init__.py env.py`
-- `20:56:40` Bash: `cd /opt/RoboEnvs/roboenvs; cat predicates.py geometry.py`
-- `20:56:40` Bash: `cd /opt/RoboEnvs/roboenvs; cat objects.py scene.py`
+- `20:56:36` Bash: `cat /opt/LongHorizonTAMP/README.md; ls -R /opt/LongHorizonTAMP | head -100; mkdir -p /workspace/claude`
+- `20:56:38` Bash: `cd /opt/LongHorizonTAMP/longhorizontamp; wc -l *.py; cat assets/*.yaml tasks/*.yaml`
+- `20:56:38` Bash: `cd /opt/LongHorizonTAMP/longhorizontamp; cat __init__.py env.py`
+- `20:56:40` Bash: `cd /opt/LongHorizonTAMP/longhorizontamp; cat predicates.py geometry.py`
+- `20:56:40` Bash: `cd /opt/LongHorizonTAMP/longhorizontamp; cat objects.py scene.py`
 - `20:56:42` Read: `/home/agent/.claude/projects/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/tool-results/bh5n2z6ry.txt`
 - `20:56:45` Read: `/home/agent/.claude/projects/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/tool-results/b9o5b3b4i.txt`
 **20:56:57 · agent:** Read the env source; now probing the environments empirically (reach, scene layouts, timing) before writing controllers.
 
-- `20:56:59` Bash: `cat /opt/RoboEnvs/tests/test_envs.py | head -80; cd /workspace/claude && time python -c "`
+- `20:56:59` Bash: `cat /opt/LongHorizonTAMP/tests/test_envs.py | head -80; cd /workspace/claude && time python -c "`
 - `20:57:13` Bash: `python -c "`
 - `20:57:25` Bash: `python -c "`
 - `20:57:50` Bash: `mkdir -p /workspace/claude/solutions /workspace/claude/videos /workspace/claude/notes; cd /workspace/claude && cat > /tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/reach.p`
@@ -131,7 +133,7 @@ Work autonomously until all deliverables are complete.
 - `21:38:07` Bash: `cat > /tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/env2.py <<'EOF'`
 - `21:40:18` Bash: `cat > /tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/yawr.py <<'EOF'`
 - `21:41:49` Bash: `python - <<'EOF'`
-- `21:42:07` Bash: `S=/tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/yawr.py; sed -i "s/Agent('roboenvs\/PackRack-v1', 18)/Agent('roboenvs\/PackRack-v1', 5)/; s/for az in \[-0.55, -0.3\]/for `
+- `21:42:07` Bash: `S=/tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/yawr.py; sed -i "s/Agent('longhorizontamp\/PackRack-v1', 18)/Agent('longhorizontamp\/PackRack-v1', 5)/; s/for az in \[-0.55, -0.3\]/for `
 **21:43:48 · agent:** Clean data now: r≤0.70 is safe at any height; beyond ~0.74 it depends on path and yaw. Testing approach strategies for far, low targets.
 
 - `21:43:55` Bash: `cat > /tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/appr.py <<'EOF'`
@@ -277,7 +279,7 @@ Work autonomously until all deliverables are complete.
 **02:10:13 · agent:** Update: the held-out run (iteration-7 code) is halfway; so far its only failures are UnderRack-v1 seeds 39 and 41. Tracing those with the current code.
 
 - `02:10:16` Bash: `cd /workspace/claude/solutions; rm -f ../notes/tr_*; for s in 39 41; do (python /tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/dbg6.py RedBoxUnderRack-v1 $s 2>&1 | grep -E`
-- `02:13:50` Bash: `for s in 39 41 34; do python /tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/plan.py roboenvs/RedBoxUnderRack-v1 $s 2>&1 | tail -2; done`
+- `02:13:50` Bash: `for s in 39 41 34; do python /tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/plan.py LongHorizonTAMP/RedBoxUnderRack-v1 $s 2>&1 | tail -2; done`
 - `02:14:44` Bash: `cat > /tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/tilt2.py <<'EOF'`
 - `02:16:04` Bash: `cat > /tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/roll.py <<'EOF'`
 **02:16:57 · agent:** The roll works: the short bar now hangs straight down (stick y-axis ≈ (−0.09, 0.21, −0.97)) and the elbow stays healthy. Continuing the experiment: place the post just beyond the box and pull.
@@ -369,7 +371,7 @@ Work autonomously until all deliverables are complete.
 - `04:15:58` Bash: `cd /workspace/claude; timeout 590 bash -c 'while ! grep -q "^environment" results/final_iter10_all60.log; do sleep 30; done'; grep -c seed results/final_iter10_all60.log; grep FAIL results/final_iter1`
 - `04:26:19` Write: `/workspace/claude/REPORT.md`
 - `04:26:27` Bash: `sed -i 's/(7.5 % of UnderRack-v1 scenes, also some BlueSpot-v1 scenes)/(4 of 40 UnderRack-v1 scenes, on either side of the rack, plus one BlueSpot-v1 scene where the blue box blocked every hook pose)/`
-- `04:26:35` Bash: `cd /workspace/claude/solutions && python /tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/plan4.py roboenvs/RedBoxToBlueSpot-v1 22 2>&1 | tail -2`
+- `04:26:35` Bash: `cd /workspace/claude/solutions && python /tmp/claude-1000/-workspace/6a1c965f-4fa1-4a4b-9e62-caabe29d8236/scratchpad/plan4.py LongHorizonTAMP/RedBoxToBlueSpot-v1 22 2>&1 | tail -2`
 - `04:26:44` Bash: `sed -i "s/print('box', b, 'r', np.hypot(\*b), 'rack', a.pos('rack')\[:2\], 'stick', sp, sy, hand)/print('box', b, 'r', np.hypot(*b), 'stick', sp, sy, hand)/" /tmp/claude-1000/-workspace/6a1c965f-4fa1-`
 - `04:26:56` Bash: `cd /workspace/claude && grep -n "plus one BlueSpot-v1" REPORT.md | cut -c1-120; sed -i 's/plus one BlueSpot-v1 scene where the blue box blocked every hook pose)/and one BlueSpot-v1 scene where the blu`
 **04:27:01 · agent:** Writing RESULTS.md while the final run proceeds; a small script will generate the results table directly from the JSON so the numbers are exact.

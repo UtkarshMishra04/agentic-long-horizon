@@ -1,4 +1,4 @@
-"""Solution for roboenvs/RedBoxToBlueSpot-v1 (run: python RedBoxToBlueSpot-v1.py --seed 0 [--video out.gif]).
+"""Solution for LongHorizonTAMP/RedBoxToBlueSpot-v1 (run: python RedBoxToBlueSpot-v1.py --seed 0 [--video out.gif]).
 
 The red box starts beyond reach: pull it in with the L-stick and park the stick in the workspace away
 from both boxes and from the blue box's start; then move the blue box away and put the red box there.
@@ -15,7 +15,7 @@ from bluespot_common import solve_bluespot  # noqa: E402
 from common import Skills, main  # noqa: E402
 from tool_common import fetch_far_box  # noqa: E402
 
-ENV_ID = "roboenvs/RedBoxToBlueSpot-v1"
+ENV_ID = "LongHorizonTAMP/RedBoxToBlueSpot-v1"
 
 
 def stick_in_workspace(center, yaw):

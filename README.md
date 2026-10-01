@@ -1,6 +1,6 @@
-# RoboEnvs × coding agents
+# LongHorizonTAMP × coding agents
 
-Can a coding agent write robot controllers from scratch? This repository holds **RoboEnvs**, a benchmark of nine
+Can a coding agent write robot controllers from scratch? This repository holds **LongHorizonTAMP**, a benchmark of nine
 long-horizon task and motion planning (TAMP) problems for a Franka Panda arm, and two complete runs of coding agents
 solving it:
 
@@ -20,8 +20,8 @@ page is static (no server, no build step); GitHub Pages can serve it from `/docs
 ## Repository layout
 
 ```
-RoboEnvs/      the benchmark: 9 long-horizon TAMP tasks for a Franka Panda in robosuite/MuJoCo (pip-installable)
-docker/        the sandbox both agents ran in: read-only RoboEnvs, Claude Code + Codex, tmux
+LongHorizonTAMP/      the benchmark: 9 long-horizon TAMP tasks for a Franka Panda in robosuite/MuJoCo (pip-installable)
+docker/        the sandbox both agents ran in: read-only LongHorizonTAMP, Claude Code + Codex, tmux
 prompts/       PROMPT.md (the task as one prompt) and the prompts as each agent actually received them
 runs/          per agent: final code, evaluation results, its own write-ups, key conversation log
 docs/          the website (index.html, app.js, data/, media/)
@@ -31,11 +31,11 @@ tools/         scripts that built runs/ and docs/data/ from the raw runs
 ## Try the environments
 
 ```bash
-pip install -e RoboEnvs        # Python 3.8+, mujoco 2.3.7, robosuite 1.4.1
+pip install -e LongHorizonTAMP        # Python 3.8+, mujoco 2.3.7, robosuite 1.4.1
 export MUJOCO_GL=egl           # or osmesa on a machine without a GPU
 python - <<'EOF'
-import roboenvs
-env = roboenvs.make("roboenvs/RedBoxOnRack-v0")
+import longhorizontamp
+env = longhorizontamp.make("LongHorizonTAMP/RedBoxOnRack-v0")
 obs, info = env.reset(seed=1)
 print(env.get_goal()["text"])
 for _ in range(100):
@@ -44,7 +44,7 @@ env.close()
 EOF
 ```
 
-`RoboEnvs/README.md` documents the nine tasks, the interface (`reset`, `get_state`, `get_goal`, `step`), the
+`LongHorizonTAMP/README.md` documents the nine tasks, the interface (`reset`, `get_state`, `get_goal`, `step`), the
 action and observation spaces, the state layout and the goal format.
 
 Run an agent's solution, e.g. Claude's:
@@ -56,14 +56,14 @@ cd runs/claude-opus-5.5/code && python solutions/RedBoxUnderRack-v1.py --seed 1
 ## Run your own agent in the same sandbox
 
 ```bash
-docker build -t roboenvs -f docker/Dockerfile .   # Python 3.8, MuJoCo, robosuite, CPU rendering, Node, claude, codex, tmux
+docker build -t longhorizontamp -f docker/Dockerfile .   # Python 3.8, MuJoCo, robosuite, CPU rendering, Node, claude, codex, tmux
 docker/run.sh                                     # persistent container, attach to tmux; log in to claude/codex once
 docker/run.sh claude                              # tmux session running Claude Code without permission prompts
 docker/run.sh codex                               # tmux session running Codex without approvals
 ```
 
-Inside the container RoboEnvs is at `/opt/RoboEnvs` (root-owned, read-only), the agent runs as the non-root user
-`agent`, and `/workspace` (a host folder, default `~/roboenvs_workspace`) is the only writable place. Give the agent
+Inside the container LongHorizonTAMP is at `/opt/LongHorizonTAMP` (root-owned, read-only), the agent runs as the non-root user
+`agent`, and `/workspace` (a host folder, default `~/longhorizontamp_workspace`) is the only writable place. Give the agent
 [`prompts/PROMPT.md`](prompts/PROMPT.md). Logins persist in Docker volumes; tmux sessions survive closing the
 terminal (`docker/run.sh --stop` removes the container).
 

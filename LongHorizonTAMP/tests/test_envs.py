@@ -3,25 +3,25 @@
 import numpy as np
 import pytest
 
-import roboenvs
+import longhorizontamp
 
 EXPECTED_OBJECTS = {
-    "roboenvs/LiftRedBox-v0": 3,
-    "roboenvs/RedBoxOnRack-v0": 3,
-    "roboenvs/RedBoxUnderRack-v0": 3,
-    "roboenvs/RedBoxUnderRack-v1": 3,
-    "roboenvs/RedBoxToBlueSpot-v0": 3,
-    "roboenvs/RedBoxToBlueSpot-v1": 3,
-    "roboenvs/PackRack-v0": 4,
-    "roboenvs/PackRack-v1": 4,
-    "roboenvs/PackRack-v2": 5,
+    "LongHorizonTAMP/LiftRedBox-v0": 3,
+    "LongHorizonTAMP/RedBoxOnRack-v0": 3,
+    "LongHorizonTAMP/RedBoxUnderRack-v0": 3,
+    "LongHorizonTAMP/RedBoxUnderRack-v1": 3,
+    "LongHorizonTAMP/RedBoxToBlueSpot-v0": 3,
+    "LongHorizonTAMP/RedBoxToBlueSpot-v1": 3,
+    "LongHorizonTAMP/PackRack-v0": 4,
+    "LongHorizonTAMP/PackRack-v1": 4,
+    "LongHorizonTAMP/PackRack-v2": 5,
 }
 
 
-@pytest.mark.parametrize("env_id", sorted(roboenvs.ENV_IDS))
+@pytest.mark.parametrize("env_id", sorted(longhorizontamp.ENV_IDS))
 @pytest.mark.parametrize("control", ["delta", "absolute"])
 def test_env(env_id, control):
-    env = roboenvs.make(env_id, control=control)
+    env = longhorizontamp.make(env_id, control=control)
     try:
         seeds = []
         for seed in (1, 2):
@@ -54,7 +54,7 @@ def test_env(env_id, control):
 
 
 def test_time_limit():
-    env = roboenvs.make("roboenvs/PackRack-v0", max_episode_steps=5)
+    env = longhorizontamp.make("LongHorizonTAMP/PackRack-v0", max_episode_steps=5)
     try:
         env.reset(seed=3)
         for _ in range(5):
