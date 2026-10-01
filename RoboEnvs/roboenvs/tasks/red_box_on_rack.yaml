@@ -1,0 +1,21 @@
+name: red_box_on_rack
+objects:
+  - assets/table.yaml
+  - assets/rack.yaml
+  - assets/lstick.yaml
+  - assets/red_box.yaml
+variants:
+  - initial_state:
+      - free(lstick)
+      - free(red_box)
+      - aligned(rack)
+      - poslimit(rack)
+      - inworkspace(rack)
+      - entirelyinworkspace(lstick)
+      - beyondworkspace(red_box)
+      - nonblocking(red_box, rack)
+      - on(rack, table)
+      - on(lstick, table)
+      - on(red_box, table)
+    goal:
+      - on(red_box, rack)

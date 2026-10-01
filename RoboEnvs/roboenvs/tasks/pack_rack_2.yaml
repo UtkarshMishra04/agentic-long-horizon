@@ -1,0 +1,31 @@
+name: pack_rack_2
+objects:
+  - assets/table.yaml
+  - assets/rack.yaml
+  - assets/blue_box.yaml
+  - assets/yellow_box.yaml
+  - assets/red_box.yaml
+  - assets/cyan_box.yaml
+variants:
+  - initial_state:
+      - free(red_box)
+      - free(yellow_box)
+      - free(cyan_box)
+      - free(blue_box)
+      - aligned(rack)
+      - poslimit(rack)
+      - inworkspace(rack)
+      - inworkspace(red_box)
+      - inworkspace(yellow_box)
+      - inworkspace(cyan_box)
+      - inworkspace(blue_box)
+      - on(rack, table)
+      - on(red_box, table)
+      - on(yellow_box, table)
+      - on(cyan_box, table)
+      - on(blue_box, table)
+    goal:
+      - on(red_box, rack)
+      - on(yellow_box, rack)
+      - on(cyan_box, rack)
+      - on(blue_box, rack)

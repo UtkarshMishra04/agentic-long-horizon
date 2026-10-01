@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two coding agents solve RoboEnvs: Codex (GPT-6-Astra) vs Claude Code (Opus 5.5)</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav><div class="inner">
+  <span class="brand">RoboEnvs × coding agents</span>
+  <a href="#benchmark">Benchmark</a>
+  <a href="#setup">Setup</a>
+  <a href="#results">Results</a>
+  <a href="#videos">Video explorer</a>
+  <a href="#iterations">Iterations</a>
+  <a href="#logs">Conversation logs</a>
+  <a href="#code">Code</a>
+  <a href="#notes">Caveats</a>
+</div></nav>
+
+<main>
+<header>
+  <h1>Can a coding agent write robot controllers from scratch?</h1>
+  <p class="lede">Two coding agents, <span class="tag codex"><span>Codex · GPT-6-Astra</span></span> and
+  <span class="tag claude"><span>Claude Code · Opus 5.5</span></span>, each got the same nine tabletop
+  manipulation environments, a read-only copy of their code, a CPU-only container and one instruction: write
+  Python code that solves them, without any training. Everything below — success rates, every iteration, the
+  conversations, the code and 90 replayable episodes — comes from those two runs.</p>
+  <div class="tiles" id="tiles"></div>
+</header>
+
+<section id="benchmark">
+  <h2>The benchmark: RoboEnvs</h2>
+  <p class="lede">Nine tabletop manipulation tasks for a 7-joint Franka Panda arm with a parallel gripper, simulated in
+  MuJoCo through robosuite. Each task is a goal on how the objects should end up — not a list of steps — and every
+  reset draws a new random scene.</p>
+
+  <div class="grid3" style="margin-top:14px">
+    <div class="card"><h3>The scene</h3>
+      <p class="small">A table in front of the robot holds up to six objects: a <strong>rack</strong> (a 22 × 32 cm
+      table-like frame, 16 cm tall, that boxes can sit on or slide under), an <strong>L-shaped stick</strong>
+      (38 cm and 20 cm bars), and up to four <strong>boxes</strong> (red 5 cm, blue, yellow and cyan 7 cm).
+      Object positions and orientations are random in every scene.</p></div>
+    <div class="card"><h3>Reach</h3>
+      <p class="small">The arm's useful workspace is a half-disc in front of its base: objects within
+      <strong>0.75 m</strong> count as inside the workspace, objects at <strong>0.85 m or more</strong> are beyond it
+      (the buffer in between is never used for sampling). Several tasks deliberately start an object beyond reach.</p></div>
+    <div class="card"><h3>Interface</h3>
+      <p class="small"><code>reset(seed)</code> → observation (two 84 px cameras + joint, gripper and end-effector
+      readings); <code>get_state()</code> → robot state and every object's exact pose; <code>get_goal()</code> → the
+      goal as text plus numeric targets; <code>step(action)</code> → a 7-number command: gripper pose (absolute, or a
+      move of up to 5 cm and 0.25 rad) and open/close, at 20 steps per second.</p></div>
+  </div>
+  <div class="grid3" style="margin-top:14px">
+    <div class="card"><h3>Success</h3>
+      <p class="small">Reward is <strong>1.0 on the step all goal conditions hold, 0.0 otherwise</strong> — no partial
+      credit, no shaping. Reaching the goal ends the episode; otherwise it is cut off at the task's time limit
+      (50–125 s of simulated time).</p></div>
+    <div class="card"><h3>Goal conditions</h3>
+      <p class="small">Goals combine a few checks: an object <em>rests upright on</em> another, lies <em>under</em> the
+      rack (≥ 50% of its footprint), is <em>held</em> or raised, is <em>within 15 cm of a position</em>, has
+      <em>nothing on top</em> and keeps clear of other objects, or is <em>inside the workspace</em>.</p></div>
+    <div class="card"><h3>What makes it hard</h3>
+      <p class="small">Out-of-reach objects, a rack light enough to be knocked over, a goal position that is
+      occupied at the start, a small rack that must fit three or four boxes, and an arm whose elbow and wrist run
+      into joint limits near the edge of its reach — none of which the documentation spells out.</p></div>
+  </div>
+
+  <h3 style="margin-top:24px">The nine tasks</h3>
+  <p class="small muted">Start and goal images are one example scene each (the goal image is one configuration
+  that satisfies the goal). Scores: Codex on 20 seeds, Claude on 60 scenes.</p>
+  <div id="taskcards" class="taskcards"></div>
+  <p class="small muted" style="margin-top:8px">All tasks at once: <a href="#" id="openfig">initial and goal states of every task</a>.</p>
+  <img src="media/tasks.png" alt="" id="taskfig" style="display:none">
+</section>
+
+<section id="setup">
+  <h2>The setup</h2>
+  <div class="grid3">
+    <div class="card"><h3>Sandbox</h3>
+      <p class="small">A Docker container (Python 3.8, MuJoCo 2.3.7, robosuite 1.4.1, CPU rendering, 10 cores, no
+      GPU), running as a non-root user. The environments are baked in read-only at <code>/opt/RoboEnvs</code>;
+      <code>/workspace</code> is the only writable folder. Nothing else from the research code base is inside.</p></div>
+    <div class="card"><h3>Rules</h3>
+      <p class="small">No training, learned models, reinforcement learning or GPU: plain Python. Solutions may only
+      use the public interface (<code>reset</code>, <code>get_state</code>, <code>get_goal</code>,
+      <code>step</code>, the spaces); reading the source is allowed, calling private members or the simulator is
+      not. Both agents chose to control from <code>get_state()</code> (exact object poses), not from images.</p></div>
+    <div class="card"><h3>Agents</h3>
+      <p class="small"><span class="tag codex"><span>Codex CLI 0.159.2</span></span>, GPT-6-Astra, medium effort,
+      <code>--dangerously-bypass-approvals-and-sandbox --no-daemon</code>, given the task with <code>/goal</code>.<br>
+      <span class="tag claude"><span>Claude Code 2.1.285</span></span>, Opus 5.5, medium effort,
+      <code>--dangerously-skip-permissions</code>, given the task as one message. Codex ran first; its files and
+      conversation were removed from the container before Claude started.</p></div>
+  </div>
+  <h3>The prompt</h3>
+  <p class="small">The task, as one prompt (also in <code>prompts/PROMPT.md</code>, ready to give to any agent):</p>
+  <details class="card" open><summary>Show the prompt</summary><pre id="prompt-merged"></pre></details>
+  <details class="card" style="margin-top:10px"><summary>How each agent actually received it</summary>
+    <p class="small">The content is the same; the delivery differed. Codex got the core task as a <code>/goal</code>
+    and three follow-ups typed during its run (code per environment, videos of 5 random seeds, the compact
+    iteration report). Claude got everything in one message, with the iteration report included from the start
+    and its own sub-folder <code>/workspace/claude/</code>.</p>
+    <div class="grid2">
+      <div><h4><span class="tag codex"><span>Codex</span></span></h4><pre id="prompt-codex"></pre></div>
+      <div><h4><span class="tag claude"><span>Claude Code</span></span></h4><pre id="prompt-claude"></pre></div>
+    </div>
+  </details>
+</section>
+
+<section id="results">
+  <h2>Results</h2>
+  <p>Success = the episode ends with <code>terminated=True</code> (goal reached) before the time limit. Codex
+  evaluated 20 seeds per environment; Claude evaluated 60 distinct scenes per environment, 20 of which it had
+  never run before the final cycle.</p>
+  <div class="btnrow" style="margin-bottom:10px">
+    <span class="lbl">Claude seeds</span>
+    <button class="btn active" data-claudeset="claude">all 60</button>
+    <button class="btn" data-claudeset="claude20">first 20 (same count as Codex)</button>
+    <span class="lbl" style="margin-left:18px">View</span>
+    <button class="btn active" data-resview="chart">chart</button>
+    <button class="btn" data-resview="table">table</button>
+  </div>
+  <div class="chart" id="reschart"></div>
+  <div id="restable" style="display:none"></div>
+
+  <h3>Getting there: success over the run</h3>
+  <p class="small muted">Every evaluation each agent ran, at the time it finished. Hover for details; click a point
+  to open that iteration below. Runs differ in how many episodes they cover (shown as point size).</p>
+  <div class="chart" id="progresschart"></div>
+</section>
+
+<section id="videos">
+  <h2>Video explorer</h2>
+  <p>All 90 recorded episodes (5 per task and agent). Each was replayed with state logging — the replays reproduce
+  every recorded episode step for step — so the map and charts beside the video show exactly what happens in it.
+  Pick a task and seed, scrub, slow down, or jump to an event.</p>
+  <div class="explorer">
+    <div class="controls-top">
+      <div class="btnrow taskbtns" id="taskbtns"><span class="lbl">Task</span></div>
+      <div class="btnrow" id="modebtns"><span class="lbl">Show</span>
+        <button class="btn codex" data-mode="codex"><span class="dot" style="background:var(--codex)"></span>Codex</button>
+        <button class="btn claude" data-mode="claude"><span class="dot" style="background:var(--claude)"></span>Claude</button>
+        <button class="btn active" data-mode="both">side by side</button>
+        <span class="small muted" style="margin-left:12px">Keys: <span class="kbd">space</span> play/pause ·
+        <span class="kbd">←</span><span class="kbd">→</span> step · <span class="kbd">[</span><span class="kbd">]</span> previous/next event</span>
+      </div>
+      <div class="goalbox" id="goalbox"></div>
+    </div>
+    <div class="players" id="players"></div>
+  </div>
+</section>
+
+<section id="iterations">
+  <h2>Iterations: what each agent observed and changed</h2>
+  <p>Each step is one evaluation run the agent made. "Observed" is the agent's own narration written since the
+  previous run; "changed" is the agent's summary (Claude's REPORT.md) or its saved code snapshot (Codex), with the
+  actual code diff where a snapshot exists.</p>
+  <div class="btnrow" style="margin-bottom:10px">
+    <span class="lbl">Agent</span>
+    <button class="btn claude active" data-iteragent="claude">Claude</button>
+    <button class="btn codex" data-iteragent="codex">Codex</button>
+  </div>
+  <div class="card">
+    <div class="btnrow">
+      <button class="btn" id="iterprev">◀ previous</button>
+      <input type="range" id="iterslider" class="iter-slider" min="0" max="0" value="0" style="flex:1">
+      <button class="btn" id="iternext">next ▶</button>
+    </div>
+    <div id="iterdetail" class="iter-detail"></div>
+  </div>
+  <div class="grid2" style="margin-top:16px">
+    <div class="card"><h3>Claude's own summary (REPORT.md)</h3><div id="claude-report" class="small"></div></div>
+    <div class="card"><h3>Codex's own summary (final message)</h3><div id="codex-report" class="small"></div></div>
+  </div>
+</section>
+
+<section id="logs">
+  <h2>Conversation logs</h2>
+  <p>The prompts, the agents' own narration, and every command they ran (outputs omitted). Times are minutes since
+  the agent started.</p>
+  <div class="btnrow" style="margin-bottom:8px">
+    <span class="lbl">Agent</span>
+    <button class="btn claude active" data-logagent="claude">Claude</button>
+    <button class="btn codex" data-logagent="codex">Codex</button>
+    <span class="lbl" style="margin-left:14px">Show</span>
+    <label class="small"><input type="checkbox" data-logkind="user" checked> prompts</label>
+    <label class="small"><input type="checkbox" data-logkind="agent" checked> narration</label>
+    <label class="small"><input type="checkbox" data-logkind="tool"> commands</label>
+    <input type="search" id="logsearch" placeholder="search…" style="margin-left:auto;padding:6px 10px;border:1px solid var(--border);border-radius:8px;min-width:220px">
+  </div>
+  <div class="small muted" id="logcount"></div>
+  <div class="card" style="max-height:620px;overflow:auto;padding:0"><table id="logtable"><tbody></tbody></table></div>
+</section>
+
+<section id="code">
+  <h2>The code</h2>
+  <p>Every file of each agent's final solution. One command runs a task, e.g. <code>python solutions/PackRack-v2.py --seed 1</code>.</p>
+  <div class="btnrow" style="margin-bottom:8px">
+    <span class="lbl">Agent</span>
+    <button class="btn claude active" data-codeagent="claude">Claude</button>
+    <button class="btn codex" data-codeagent="codex">Codex</button>
+    <span class="small muted" id="codestats" style="margin-left:12px"></span>
+  </div>
+  <div style="display:grid;grid-template-columns:240px 1fr;gap:12px">
+    <div class="card" style="padding:8px;max-height:640px;overflow:auto"><ul id="filelist" class="events"></ul></div>
+    <div class="card" style="padding:0;max-height:640px;overflow:auto"><pre id="codeview" style="margin:0;border-radius:10px"></pre></div>
+  </div>
+</section>
+
+<section id="notes">
+  <h2>Caveats</h2>
+  <ul>
+    <li><strong>Privileged state.</strong> Both agents control from <code>get_state()</code>, the simulator's exact
+    object poses, not from camera images. These are state-based controllers.</li>
+    <li><strong>Different evaluation sizes.</strong> Codex: 20 seeds per environment. Claude: 60 distinct scenes,
+    of which seeds 41–60 were held out until cycle 10 (178/180 there; the two BlueSpot failures were then fixed
+    and those two environments re-run).</li>
+    <li><strong>Seeds.</strong> <code>reset(seed)</code> skips seeds whose scene is invalid, and which seeds are
+    skipped can depend on what the same environment instance did before. Claude evaluated only seeds that a fresh
+    environment maps to themselves; Codex used seeds 0, 1000, …, 19000. A fresh process reproduces each scene.</li>
+    <li><strong>Free episode.</strong> One RedBoxToBlueSpot-v0 scene already satisfies its goal at reset (the red
+    box starts within 0.15 m of the blue box's start): success at step 1. It appears in both agents' videos.</li>
+    <li><strong>Self-reported runs, independently replayed videos.</strong> The success tables are the agents' own
+    evaluations (checked against their raw result files). The 90 video episodes were re-run for this page and
+    matched the recordings exactly.</li>
+    <li><strong>A process mistake.</strong> During the Codex run a second, unintended Codex process also wrote to
+    <code>/workspace</code> for its first ~1.7 hours before it was stopped; its intermediate files may be mixed
+    into Codex's development folder. The final evaluation ran after it stopped.</li>
+  </ul>
+</section>
+
+<footer>Built from the two runs' workspaces, evaluation files and transcripts. Repository layout and how to try the
+environments yourself: see <code>README.md</code> at the repository root.</footer>
+</main>
+
+<div class="lightbox" id="lightbox"><img src="media/tasks.png" alt="Initial and goal states, enlarged"></div>
+<div class="tooltip" id="tooltip"></div>
+
+<script src="data/summary.js"></script>
+<script src="data/catalog.js"></script>
+<script src="data/run_claude.js"></script>
+<script src="data/run_codex.js"></script>
+<script src="data/diff_claude.js"></script>
+<script src="data/diff_codex.js"></script>
+<script src="data/prompts.js"></script>
+<script src="data/reports.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

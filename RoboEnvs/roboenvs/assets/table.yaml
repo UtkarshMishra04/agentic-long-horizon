@@ -1,0 +1,3 @@
+object_type: Table
+object_kwargs:
+  name: table

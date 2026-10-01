@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "roboenvs"
+version = "1.0.0"
+description = "Tabletop manipulation environments on robosuite (MuJoCo)."
+requires-python = ">=3.8"
+dependencies = [
+  "numpy>=1.23,<2",
+  "gym==0.26.2",
+  "mujoco==2.3.7",
+  "robosuite==1.4.1",
+  "shapely>=2.0",
+  "pyyaml>=6.0",
+  "pillow>=9.0",
+  "imageio>=2.28",
+]
+
+[tool.setuptools.packages.find]
+include = ["roboenvs*"]
+
+[tool.setuptools.package-data]
+roboenvs = ["tasks/*.yaml", "assets/*.yaml"]

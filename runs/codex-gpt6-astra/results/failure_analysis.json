@@ -1,0 +1,136 @@
+[
+  {
+    "env": "roboenvs/RedBoxToBlueSpot-v1",
+    "seed": 7000,
+    "scene_seed": 7000,
+    "reasons": [
+      "blue_box is outside the required workspace",
+      "blue_box is tipped"
+    ]
+  },
+  {
+    "env": "roboenvs/PackRack-v2",
+    "seed": 12000,
+    "scene_seed": 12000,
+    "reasons": [
+      "cyan_box fell off the table",
+      "cyan_box is tipped",
+      "cyan_box is not at the required support height",
+      "cyan_box is outside the rack footprint"
+    ]
+  },
+  {
+    "env": "roboenvs/PackRack-v2",
+    "seed": 13000,
+    "scene_seed": 13001,
+    "reasons": [
+      "red_box is not at the required support height",
+      "red_box is outside the rack footprint"
+    ]
+  },
+  {
+    "env": "roboenvs/RedBoxToBlueSpot-v1",
+    "seed": 17000,
+    "scene_seed": 17004,
+    "reasons": [
+      "red_box position error 0.409 m exceeds 0.150 m",
+      "red_box is tipped",
+      "red_box is too close to lstick",
+      "lstick is tipped",
+      "lstick is too close to red_box",
+      "lstick is outside the required workspace"
+    ]
+  },
+  {
+    "env": "roboenvs/RedBoxToBlueSpot-v1",
+    "seed": 19000,
+    "scene_seed": 19004,
+    "reasons": [
+      "blue_box is too close to lstick",
+      "lstick is too close to blue_box"
+    ]
+  },
+  {
+    "env": "roboenvs/RedBoxUnderRack-v1",
+    "seed": 0,
+    "scene_seed": 1,
+    "reasons": [
+      "rack fell off the table",
+      "red_box rack overlap 0.0% is below 50.0%"
+    ]
+  },
+  {
+    "env": "roboenvs/RedBoxUnderRack-v1",
+    "seed": 5000,
+    "scene_seed": 5001,
+    "reasons": [
+      "rack is overturned or tilted",
+      "lstick fell off the table",
+      "red_box rack overlap 6.1% is below 50.0%",
+      "red_box is tipped"
+    ]
+  },
+  {
+    "env": "roboenvs/RedBoxUnderRack-v1",
+    "seed": 7000,
+    "scene_seed": 7000,
+    "reasons": [
+      "red_box rack overlap 0.0% is below 50.0%"
+    ]
+  },
+  {
+    "env": "roboenvs/RedBoxUnderRack-v1",
+    "seed": 8000,
+    "scene_seed": 8004,
+    "reasons": [
+      "red_box rack overlap 0.0% is below 50.0%",
+      "red_box is tipped"
+    ]
+  },
+  {
+    "env": "roboenvs/RedBoxUnderRack-v1",
+    "seed": 9000,
+    "scene_seed": 9000,
+    "reasons": [
+      "red_box rack overlap 0.0% is below 50.0%",
+      "red_box is tipped"
+    ]
+  },
+  {
+    "env": "roboenvs/RedBoxUnderRack-v1",
+    "seed": 10000,
+    "scene_seed": 10000,
+    "reasons": [
+      "red_box rack overlap 0.0% is below 50.0%"
+    ]
+  },
+  {
+    "env": "roboenvs/RedBoxUnderRack-v1",
+    "seed": 12000,
+    "scene_seed": 12000,
+    "reasons": [
+      "red_box rack overlap 0.0% is below 50.0%"
+    ]
+  },
+  {
+    "env": "roboenvs/RedBoxUnderRack-v1",
+    "seed": 13000,
+    "scene_seed": 13000,
+    "reasons": [
+      "rack is overturned or tilted",
+      "red_box rack overlap 0.0% is below 50.0%",
+      "red_box is tipped"
+    ]
+  },
+  {
+    "env": "roboenvs/RedBoxUnderRack-v1",
+    "seed": 17000,
+    "scene_seed": 17001,
+    "reasons": [
+      "rack fell off the table",
+      "red_box rack overlap 0.0% is below 50.0%",
+      "red_box is tipped",
+      "red_box is not at the required support height"
+    ]
+  }
+]

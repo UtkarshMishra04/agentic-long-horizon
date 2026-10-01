@@ -1,0 +1,6 @@
+# Only RoboEnvs and the requirements enter the image; the rest of the repository stays out.
+*
+!RoboEnvs
+!docker/requirements.txt
+RoboEnvs/**/__pycache__
+RoboEnvs/**/*.pyc

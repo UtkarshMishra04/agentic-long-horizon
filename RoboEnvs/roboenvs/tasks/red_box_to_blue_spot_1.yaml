@@ -1,0 +1,28 @@
+name: red_box_to_blue_spot_1
+objects:
+  - assets/table.yaml
+  - assets/lstick.yaml
+  - assets/red_box.yaml
+  - assets/blue_box.yaml
+variants:
+  - initial_state:
+      - free(red_box)
+      - beyondworkspace(red_box)
+      - free(blue_box)
+      - nonblocking(red_box, blue_box)
+      - inworkspace(blue_box)
+      - pos(blue_box, x)
+      - on(red_box, table)
+      - on(blue_box, table)
+      - on(lstick, table)
+      - entirelyinworkspace(lstick)
+    goal:
+      - pos(red_box, x)
+      - on(red_box, table)
+      - free(red_box)
+      - inworkspace(blue_box)
+      - on(blue_box, table)
+      - free(blue_box)
+      - on(lstick, table)
+      - free(lstick)
+      - inworkspace(lstick)

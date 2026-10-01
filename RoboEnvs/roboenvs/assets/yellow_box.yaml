@@ -1,0 +1,5 @@
+object_type: Box
+object_kwargs:
+  name: yellow_box
+  size: [0.07, 0.07, 0.07]
+  color: [1.0, 1.0, 0.0, 1.0]

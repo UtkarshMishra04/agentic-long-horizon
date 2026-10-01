@@ -1,0 +1,23 @@
+name: red_box_under_rack_0
+objects:
+  - assets/table.yaml
+  - assets/rack.yaml
+  - assets/lstick.yaml
+  - assets/red_box.yaml
+variants:
+  - initial_state:
+      - free(lstick)
+      - free(red_box)
+      - aligned(rack)
+      - poslimit(rack)
+      - inworkspace(lstick)
+      - inworkspace(red_box)
+      - beyondworkspace(rack)
+      - nonblocking(rack, lstick)
+      - notincenter(red_box)
+      - on(rack, table)
+      - on(lstick, table)
+      - on(red_box, table)
+    goal:
+      - under(red_box, rack)
+      - on(red_box, table)

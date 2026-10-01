@@ -1,0 +1,56 @@
+{
+  "LiftRedBox-v0": {
+    "successes": 20,
+    "episodes": 20,
+    "success_rate": 1.0,
+    "unique_scene_seeds": 20
+  },
+  "RedBoxOnRack-v0": {
+    "successes": 20,
+    "episodes": 20,
+    "success_rate": 1.0,
+    "unique_scene_seeds": 20
+  },
+  "RedBoxUnderRack-v0": {
+    "successes": 20,
+    "episodes": 20,
+    "success_rate": 1.0,
+    "unique_scene_seeds": 20
+  },
+  "RedBoxUnderRack-v1": {
+    "successes": 11,
+    "episodes": 20,
+    "success_rate": 0.55,
+    "unique_scene_seeds": 20
+  },
+  "RedBoxToBlueSpot-v0": {
+    "successes": 20,
+    "episodes": 20,
+    "success_rate": 1.0,
+    "unique_scene_seeds": 20
+  },
+  "RedBoxToBlueSpot-v1": {
+    "successes": 17,
+    "episodes": 20,
+    "success_rate": 0.85,
+    "unique_scene_seeds": 20
+  },
+  "PackRack-v0": {
+    "successes": 20,
+    "episodes": 20,
+    "success_rate": 1.0,
+    "unique_scene_seeds": 20
+  },
+  "PackRack-v1": {
+    "successes": 20,
+    "episodes": 20,
+    "success_rate": 1.0,
+    "unique_scene_seeds": 20
+  },
+  "PackRack-v2": {
+    "successes": 18,
+    "episodes": 20,
+    "success_rate": 0.9,
+    "unique_scene_seeds": 20
+  }
+}
