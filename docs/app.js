@@ -1,6 +1,7 @@
 /* Interactive page for the RoboEnvs agent runs. No dependencies; works from file:// (data is loaded as scripts). */
 (function () {
   "use strict";
+  const GITHUB_URL = "https://github.com/OWNER/roboenvs-agents";  // TODO: set to the public repository
   const S = window.SUMMARY, CAT = window.CATALOG, RUNS = window.RUNS, DIFFS = window.DIFFS;
   const AG = { codex: { name: "Codex", color: "var(--codex)", hex: "#2a78d6" }, claude: { name: "Claude", color: "var(--claude)", hex: "#eb6834" } };
   const OBJ_COLOR = { red_box: "#e34948", blue_box: "#2a78d6", yellow_box: "#eda100", cyan_box: "#1baf7a", lstick: "#4a3aa7", rack: "#898781" };
@@ -115,81 +116,17 @@
     $("#openfig").onclick = (ev) => { ev.preventDefault(); lb.classList.add("open"); };
     lb.onclick = () => lb.classList.remove("open");
     $("#prompt-merged").textContent = window.PROMPTS.merged;
-    $("#prompt-codex").textContent = window.PROMPTS.codex;
-    $("#prompt-claude").textContent = window.PROMPTS.claude;
   }
 
   // ------------------------------------------------------------------ results chart
-  let claudeSet = "claude";
-  function resultsChart() {
-    const box = $("#reschart"); box.innerHTML = "";
-    const W = box.clientWidth - 32, rowH = 40, top = 34, left = 170, right = 70, H = top + S.envs.length * rowH + 30;
-    const s = svg("svg", { width: W, height: H, role: "img", "aria-label": "Success rate per environment for both agents" }, box);
-    const x = (v) => left + (W - left - right) * v / 100;
-    for (const v of [0, 25, 50, 75, 100]) {
-      svg("line", { x1: x(v), x2: x(v), y1: top - 6, y2: H - 26, stroke: v ? "#e1e0d9" : "#c3c2b7", "stroke-width": 1 }, s);
-      svg("text", { x: x(v), y: H - 10, "text-anchor": "middle", "font-size": 11, fill: "#898781" }, s).textContent = v + "%";
-    }
-    const lg = svg("g", {}, s);
-    [["codex", "Codex (20 seeds)"], [claudeSet, claudeSet === "claude" ? "Claude (60 scenes)" : "Claude (first 20 scenes)"]].forEach(([k, label], i) => {
-      const ag = k.startsWith("claude") ? "claude" : "codex";
-      svg("rect", { x: left + i * 190, y: 6, width: 10, height: 10, rx: 2, fill: AG[ag].hex }, lg);
-      svg("text", { x: left + i * 190 + 16, y: 15, "font-size": 12, fill: "#52514e" }, lg).textContent = label;
-    });
-    S.envs.forEach((e, i) => {
-      const y0 = top + i * rowH;
-      svg("text", { x: left - 10, y: y0 + rowH / 2 + 4, "text-anchor": "end", "font-size": 12, fill: "#0b0b0b" }, s).textContent = e;
-      [["codex", "codex"], [claudeSet, "claude"]].forEach(([key, ag], j) => {
-        const r = S.results[e][key], v = pct(r), y = y0 + 6 + j * 15, h = 13;
-        const g = svg("g", { style: "cursor:default" }, s);
-        svg("rect", { x: left, y: y - 1, width: W - left - right, height: h + 2, fill: "transparent" }, g);
-        svg("path", { d: barPath(left, y, Math.max(x(v) - left, 2), h), fill: AG[ag].hex }, g);
-        svg("text", { x: x(v) + 6, y: y + 10.5, "font-size": 11, fill: "#52514e" }, g).textContent = `${r[0]}/${r[1]}`;
-        const steps = S.results[e][ag + "_steps"];
-        const mean = steps.length ? Math.round(steps.reduce((a, b) => a + b, 0) / steps.length) : "–";
-        g.addEventListener("mousemove", (ev) => showTip(`<b>${AG[ag].name}</b> · ${e}<br>${r[0]} of ${r[1]} episodes reach the goal (${v.toFixed(0)}%)<br>mean steps of successes: ${mean} (limit ${GOALS[e][1]})`, ev));
-        g.addEventListener("mouseleave", hideTip);
-      });
-    });
-    // table view
-    $("#restable").innerHTML = `<table><thead><tr><th>environment</th><th class="num">Codex</th><th class="num">Claude (60)</th><th class="num">Claude (first 20)</th><th class="num">time limit</th></tr></thead><tbody>` +
-      S.envs.map((e) => { const r = S.results[e]; const cell = (a) => `<td class="num ${a[0] === a[1] ? "ok" : "bad"}">${a[0]}/${a[1]}</td>`;
-        return `<tr><td>${e}</td>${cell(r.codex)}${cell(r.claude)}${cell(r.claude20)}<td class="num">${GOALS[e][1]}</td></tr>`; }).join("") + "</tbody></table>";
-  }
-  function barPath(x, y, w, h) {  // square at the baseline, 4px rounded data end
-    const r = Math.min(4, w / 2, h / 2);
-    return `M${x},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${y + h - r} Q${x + w},${y + h} ${x + w - r},${y + h} H${x} Z`;
-  }
-
-  // ------------------------------------------------------------------ progress chart
-  function progressChart() {
-    const box = $("#progresschart"); box.innerHTML = "";
-    const W = box.clientWidth - 32, H = 300, l = 52, r = 20, t = 26, b = 40;
-    const s = svg("svg", { width: W, height: H, role: "img", "aria-label": "Success rate of every evaluation run over time" }, box);
-    const maxMin = Math.max(...["codex", "claude"].map((a) => RUNS[a].iterations[RUNS[a].iterations.length - 1].minutes)) + 10;
-    const x = (m) => l + (W - l - r) * m / maxMin, y = (v) => t + (H - t - b) * (1 - v / 100);
-    for (const v of [0, 25, 50, 75, 100]) {
-      svg("line", { x1: l, x2: W - r, y1: y(v), y2: y(v), stroke: v ? "#e1e0d9" : "#c3c2b7" }, s);
-      svg("text", { x: l - 8, y: y(v) + 4, "text-anchor": "end", "font-size": 11, fill: "#898781" }, s).textContent = v + "%";
-    }
-    for (let m = 0; m <= maxMin; m += 60) svg("text", { x: x(m), y: H - 20, "text-anchor": "middle", "font-size": 11, fill: "#898781" }, s).textContent = m / 60 + " h";
-    svg("text", { x: (l + W - r) / 2, y: H - 4, "text-anchor": "middle", "font-size": 11, fill: "#52514e" }, s).textContent = "time since the agent started";
-    ["codex", "claude"].forEach((a, ai) => {
-      const its = RUNS[a].iterations;
-      const pts = its.map((it, i) => { const tot = Object.values(it.results).reduce((acc, v) => [acc[0] + v[0], acc[1] + v[1]], [0, 0]); return { it, i, tot, v: pct(tot) }; }).filter((p) => p.tot[1] > 0);
-      svg("path", { d: pts.map((p, k) => (k ? "L" : "M") + x(p.it.minutes) + "," + y(p.v)).join(" "), fill: "none", stroke: AG[a].hex, "stroke-width": 2 }, s);
-      const last = pts[pts.length - 1];
-      svg("text", { x: x(last.it.minutes) + (a === "codex" ? 8 : -8), y: y(last.v) + (a === "codex" ? 16 : -10), "text-anchor": a === "codex" ? "start" : "end", "font-size": 12, fill: "#0b0b0b", "font-weight": 600 }, s).textContent = AG[a].name;
-      pts.forEach((p) => {
-        const rad = Math.max(4, Math.min(9, Math.sqrt(p.tot[1]) / 2.4));
-        const g = svg("g", { style: "cursor:pointer" }, s);
-        svg("circle", { cx: x(p.it.minutes), cy: y(p.v), r: rad + 6, fill: "transparent" }, g);
-        svg("circle", { cx: x(p.it.minutes), cy: y(p.v), r: rad, fill: AG[a].hex, stroke: "#fcfcfb", "stroke-width": 2 }, g);
-        g.addEventListener("mousemove", (ev) => showTip(`<b>${AG[a].name}</b> · ${esc(p.it.label)} · ${fmtMin(p.it.minutes)}<br>${p.tot[0]}/${p.tot[1]} episodes (${p.v.toFixed(1)}%), ${Object.keys(p.it.results).length} environments<br><span style="opacity:.8">click to open this iteration</span>`, ev));
-        g.addEventListener("mouseleave", hideTip);
-        g.addEventListener("click", () => { hideTip(); openIteration(a, p.i); });
-      });
-    });
+  function resultsTable() {
+    const cell = (a) => `<td class="num ${a[0] === a[1] ? "ok" : "bad"}">${a[0]}/${a[1]} <span class="muted small">(${pct(a).toFixed(0)}%)</span></td>`;
+    const tot = (k) => S.envs.reduce((acc, e) => [acc[0] + S.results[e][k][0], acc[1] + S.results[e][k][1]], [0, 0]);
+    $("#restable").innerHTML = `<table><thead><tr><th>task</th><th>goal</th><th class="num">time limit</th>` +
+      `<th class="num"><span class="tag codex"><span>Codex</span></span><br><span class="muted small">20 seeds</span></th>` +
+      `<th class="num"><span class="tag claude"><span>Claude</span></span><br><span class="muted small">60 scenes</span></th></tr></thead><tbody>` +
+      S.envs.map((e) => `<tr><td><code>${e}</code></td><td class="small">${esc(GOALS[e][0])}</td><td class="num">${GOALS[e][1]}</td>${cell(S.results[e].codex)}${cell(S.results[e].claude)}</tr>`).join("") +
+      `<tr><td colspan="3"><strong>all tasks</strong></td>${cell(tot("codex"))}${cell(tot("claude"))}</tr></tbody></table>`;
   }
   const fmtMin = (m) => (m >= 60 ? `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, "0")} min` : `${m} min`);
 
@@ -294,12 +231,12 @@
   }
   function codeBrowser() {
     const render = () => {
-      const code = RUNS[codeAgent].code, files = Object.keys(code).sort((a, b) => (a.startsWith("solutions/") - b.startsWith("solutions/")) || a.localeCompare(b));
+      const code = RUNS[codeAgent].code, files = Object.keys(code).filter((f) => f.startsWith("solutions/")).sort();
       const loc = files.reduce((n, f) => n + code[f].split("\n").length, 0);
       $("#codestats").textContent = `${files.length} files · ${loc.toLocaleString()} lines`;
       $("#filelist").innerHTML = files.map((f) => `<li data-path="${esc(f)}"><span>${esc(f)}</span><span class="muted small" style="margin-left:auto">${code[f].split("\n").length}</span></li>`).join("");
       $$("#filelist li").forEach((li) => (li.onclick = () => showFile(li.dataset.path)));
-      const main = files.find((f) => /(^|\/)(common|controllers)\.py$/.test(f)) || files[0];
+      const main = files.find((f) => /(^|\/)common\.py$/.test(f)) || files[0];
       showFile(main);
     };
     $$("[data-codeagent]").forEach((b) => (b.onclick = () => { codeAgent = b.dataset.codeagent; $$("[data-codeagent]").forEach((x) => x.classList.toggle("active", x === b)); render(); }));
@@ -318,7 +255,8 @@
   }
   const EV_COLOR = { close: "#0b0b0b", open: "#898781", lift: "#2a78d6", slide: "#4a3aa7", goal: "#0ca30c" };
   const EV_LABEL = { close: "grasp", open: "release", lift: "lift", slide: "slides", goal: "goal" };
-  let task = "RedBoxUnderRack-v1", mode = "both";
+  let task = "RedBoxUnderRack-v1";
+  const mode = "both";
   const seedIdx = { codex: 0, claude: 0 };
   let players = [];
 
@@ -339,7 +277,7 @@
       el.className = "player";
       el.innerHTML = `
         <div class="head"><span class="tag ${a}"><span>${AG[a].name}</span></span>
-          <div class="btnrow seeds"><span class="lbl">Seed</span></div><span class="status"></span></div>
+          <span class="status"></span></div>
         <div class="row">
           <div>
             <div class="vidbox"><video muted playsinline preload="auto"></video></div>
@@ -363,11 +301,7 @@
           </div>
           <div class="panel"><h4><span>Top-down view</span><span class="muted small">x forward from the robot base, metres</span></h4><div class="map"></div><div class="maplegend small"></div></div>
         </div>
-        <div class="grid2" style="margin-top:10px">
-          <div class="panel"><h4><span>Heights (z, m)</span><span class="muted small">hover · click to jump</span></h4><div class="hchart"></div></div>
-          <div class="panel"><h4><span>Events</span><span class="muted small">auto-detected · click to jump</span></h4><ul class="events"></ul>
-            <h4 style="margin-top:8px"><span>Gripper opening</span></h4><div class="gchart"></div></div>
-        </div>`;
+        <div class="panel" style="margin-top:10px"><h4><span>Events</span><span class="muted small">auto-detected · click to jump</span></h4><ul class="events"></ul></div>`;
       this.host.appendChild(el); this.el = el;
       this.video = $("video", el); this.range = $(".scrub input", el);
       $$("[data-act]", el).forEach((b) => {
@@ -384,17 +318,15 @@
       el.addEventListener("click", () => (Player.focused = this));
     }
     async select(i) {
-      const eps = this.episodes(); seedIdx[this.agent] = i;
-      this.meta = eps[i];
-      $(".seeds", this.el).innerHTML = '<span class="lbl">Seed</span>' + eps.map((c, k) => `<button class="btn ${k === i ? "active" : ""}" data-k="${k}" title="scene ${c.scene_seed} · ${c.steps} steps"><span class="dot ${c.success ? "ok" : "bad"}"></span>${c.seed}</button>`).join("");
-      $$(".seeds [data-k]", this.el).forEach((b) => (b.onclick = () => this.select(+b.dataset.k)));
+      const eps = this.episodes();
+      this.meta = eps.find((c) => c.success) || eps[0];  // one episode per agent and task
       const c = this.meta;
       $(".status", this.el).innerHTML = c.success ? `<span class="ok">✓ goal at step ${c.success_step}</span> <span class="muted">(${(c.success_step / 20).toFixed(1)} s)</span>` : `<span class="bad">✗ not solved in ${c.steps} steps</span>`;
       this.video.src = c.video; this.video.load();
       this.ep = await loadEpisode(c.id);
       this.range.max = this.ep.steps;
       this.setSpeed(this.speed);
-      this.buildMap(); this.buildCharts(); this.buildEvents();
+      this.playhead = []; this.buildMap(); this.buildEvents();
       const lim = GOALS[task][1];
       $(".timelimit .used", this.el).style.width = Math.min(100, 100 * this.ep.steps / lim) + "%";
       this.seekStep(0);
@@ -510,45 +442,6 @@
       if (this.playhead) for (const ph of this.playhead) { const x = ph.x(this.step); ph.line.setAttribute("x1", x); ph.line.setAttribute("x2", x); }
       $$(".events li", this.el).forEach((li) => { const st = +li.dataset.step; li.className = st < this.step - 2 ? "past" : Math.abs(st - this.step) <= 2 ? "now" : "future"; });
     }
-    // ---- charts
-    buildCharts() {
-      this.playhead = [];
-      const ep = this.ep;
-      const series = Object.keys(ep.objects).filter((n) => n !== "rack").map((n) => ({ name: n.replace("_", " "), color: OBJ_COLOR[n], ys: ep.objects[n].z }));
-      series.push({ name: "gripper", color: "#0b0b0b", ys: ep.ee.z, dash: "4 3" });
-      this.lineChart($(".hchart", this.el), series, 0, 0.5, 170, (v) => v.toFixed(2) + " m");
-      const [lo, hi] = ep.grip_range, span = Math.max(hi - lo, 1e-6);
-      this.lineChart($(".gchart", this.el), [{ name: "closure", color: "#52514e", ys: ep.grip.map((g) => (g - lo) / span), area: true }], 0, 1, 74, (v) => (v > 0.5 ? "closed" : "open"), ["open", "closed"]);
-    }
-    lineChart(box, series, y0, y1, H, fmt, yTicks) {
-      box.innerHTML = "";
-      const ep = this.ep, W = Math.max(240, box.clientWidth || 300), l = 34, r = 8, t = 6, b = 18;
-      const s = svg("svg", { width: W, height: H, role: "img" }, box);
-      const x = (step) => l + (W - l - r) * step / Math.max(ep.steps, 1), y = (v) => t + (H - t - b) * (1 - (v - y0) / (y1 - y0));
-      const ticks = yTicks ? [[y0, yTicks[0]], [y1, yTicks[1]]] : [0, 0.1, 0.2, 0.3, 0.4, 0.5].map((v) => [v, v.toFixed(1)]);
-      for (const [v, lab] of ticks) {
-        svg("line", { x1: l, x2: W - r, y1: y(v), y2: y(v), stroke: v === y0 ? "#c3c2b7" : "#eeede8" }, s);
-        svg("text", { x: l - 4, y: y(v) + 3, "text-anchor": "end", "font-size": 9, fill: "#898781" }, s).textContent = lab;
-      }
-      for (const e of ep.events) svg("line", { x1: x(e.step), x2: x(e.step), y1: t, y2: H - b, stroke: EV_COLOR[e.kind], "stroke-opacity": 0.25 }, s);
-      for (const se of series) {
-        const d = ep.t.map((st, i) => (i ? "L" : "M") + x(st).toFixed(1) + "," + y(Math.max(y0, Math.min(y1, se.ys[i]))).toFixed(1)).join(" ");
-        if (se.area) svg("path", { d: d + ` L${x(ep.steps)},${y(y0)} L${x(0)},${y(y0)} Z`, fill: se.color, "fill-opacity": 0.12 }, s);
-        svg("path", { d, fill: "none", stroke: se.color, "stroke-width": 2, "stroke-dasharray": se.dash || "" }, s);
-      }
-      for (let st = 0; st <= ep.steps; st += ep.steps > 1500 ? 500 : 250) svg("text", { x: x(st), y: H - 5, "text-anchor": "middle", "font-size": 9, fill: "#898781" }, s).textContent = st;
-      const line = svg("line", { y1: t, y2: H - b, stroke: "#0b0b0b", "stroke-width": 1.5 }, s);
-      this.playhead.push({ line, x });
-      const hover = svg("line", { y1: t, y2: H - b, stroke: "#898781", "stroke-dasharray": "2 2", opacity: 0 }, s);
-      const hit = svg("rect", { x: l, y: t, width: W - l - r, height: H - t - b, fill: "transparent", style: "cursor:pointer" }, s);
-      const stepAt = (ev) => { const rc = s.getBoundingClientRect(); return Math.round(Math.max(0, Math.min(1, (ev.clientX - rc.left - l) / (W - l - r))) * ep.steps); };
-      hit.addEventListener("mousemove", (ev) => {
-        const st = stepAt(ev), i = idxOf(ep, st); hover.setAttribute("x1", x(st)); hover.setAttribute("x2", x(st)); hover.setAttribute("opacity", 1);
-        showTip(`step ${st} (${(st / 20).toFixed(1)} s)<br>` + series.map((se) => `<span style="color:${se.color === "#0b0b0b" ? "#fff" : se.color}">■</span> ${se.name}: ${fmt(se.ys[i])}`).join("<br>"), ev);
-      });
-      hit.addEventListener("mouseleave", () => { hover.setAttribute("opacity", 0); hideTip(); });
-      hit.addEventListener("click", (ev) => { this.pause(); this.seekStep(stepAt(ev)); });
-    }
     buildEvents() {
       const ep = this.ep;
       $(".events", this.el).innerHTML = ep.events.length ? ep.events.map((e) => `<li data-step="${e.step}"><span class="st">step ${e.step}</span><span><span style="color:${EV_COLOR[e.kind]}">●</span> ${esc(e.text)}</span></li>`).join("") : '<li class="muted">no events detected</li>';
@@ -569,7 +462,7 @@
     Player.focused = players[0];
     $("#goalbox").innerHTML = `<strong>${task}</strong> · goal: ${esc(GOALS[task][0])} · time limit ${GOALS[task][1]} steps (${GOALS[task][1] / 20} s)` +
       (mode === "both" ? ` · <button class="btn" id="playboth" style="padding:2px 9px;font-size:0.8rem">▶ play both from the start</button>` : "");
-    const pb = $("#playboth");
+    const pb = $("#playboth");  // eslint-disable-line
     if (pb) pb.onclick = () => players.forEach((p) => { p.seekStep(0); p.video.play(); });
   }
   function videoExplorer() {
@@ -579,10 +472,9 @@
       b.className = "btn" + (e === task ? " active" : ""); b.textContent = e.replace("-v", " v"); b.dataset.env = e;
       const r = S.results[e];
       b.title = `Codex ${r.codex[0]}/${r.codex[1]} · Claude ${r.claude[0]}/${r.claude[1]}`;
-      b.onclick = () => { task = e; seedIdx.codex = seedIdx.claude = 0; $$("#taskbtns .btn").forEach((x) => x.classList.toggle("active", x === b)); renderPlayers(); };
+      b.onclick = () => { task = e; $$("#taskbtns .btn").forEach((x) => x.classList.toggle("active", x === b)); renderPlayers(); };
       tb.appendChild(b);
     });
-    $$("[data-mode]").forEach((b) => (b.onclick = () => { mode = b.dataset.mode; $$("[data-mode]").forEach((x) => x.classList.toggle("active", x === b)); renderPlayers(); }));
     renderPlayers();
     document.addEventListener("keydown", (ev) => {
       if (/input|textarea/i.test(ev.target.tagName) && ev.target.type !== "range") return;
@@ -594,9 +486,8 @@
   }
 
   // ------------------------------------------------------------------ wire up
-  tiles(); taskTable(); resultsChart(); progressChart();
-  $$("[data-claudeset]").forEach((b) => (b.onclick = () => { claudeSet = b.dataset.claudeset; $$("[data-claudeset]").forEach((x) => x.classList.toggle("active", x === b)); resultsChart(); }));
-  $$("[data-resview]").forEach((b) => (b.onclick = () => { $$("[data-resview]").forEach((x) => x.classList.toggle("active", x === b)); const t = b.dataset.resview === "table"; $("#reschart").style.display = t ? "none" : ""; $("#restable").style.display = t ? "" : "none"; }));
-  videoExplorer(); iterations(); logs(); codeBrowser();
-  let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { resultsChart(); progressChart(); players.forEach((p) => { if (p.ep) { p.buildMap(); p.buildCharts(); p.draw(); } }); }, 200); });
+  tiles(); taskTable(); resultsTable();
+  $("#envcode").href = GITHUB_URL + "/tree/main/RoboEnvs";
+  videoExplorer(); iterations(); if ($("#logs")) logs(); codeBrowser();
+  let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { players.forEach((p) => { if (p.ep) { p.buildMap(); p.draw(); } }); }, 200); });
 })();

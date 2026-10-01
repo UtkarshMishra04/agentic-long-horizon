@@ -14,17 +14,16 @@
   <a href="#results">Results</a>
   <a href="#videos">Video explorer</a>
   <a href="#iterations">Iterations</a>
-  <a href="#logs">Conversation logs</a>
+  <!-- <a href="#logs">Conversation logs</a> -->
   <a href="#code">Code</a>
-  <a href="#notes">Caveats</a>
 </div></nav>
 
 <main>
 <header>
   <h1>Can a coding agent write robot controllers from scratch?</h1>
   <p class="lede">Two coding agents, <span class="tag codex"><span>Codex · GPT-6-Astra</span></span> and
-  <span class="tag claude"><span>Claude Code · Opus 5.5</span></span>, each got the same nine tabletop
-  manipulation environments, a read-only copy of their code, a CPU-only container and one instruction: write
+  <span class="tag claude"><span>Claude Code · Opus 5.5</span></span>, each got the same nine long-horizon
+  task-and-motion-planning (TAMP) environments, a read-only copy of their code, a CPU-only container and one instruction: write
   Python code that solves them, without any training. Everything below — success rates, every iteration, the
   conversations, the code and 90 replayable episodes — comes from those two runs.</p>
   <div class="tiles" id="tiles"></div>
@@ -32,9 +31,11 @@
 
 <section id="benchmark">
   <h2>The benchmark: RoboEnvs</h2>
-  <p class="lede">Nine tabletop manipulation tasks for a 7-joint Franka Panda arm with a parallel gripper, simulated in
-  MuJoCo through robosuite. Each task is a goal on how the objects should end up — not a list of steps — and every
-  reset draws a new random scene.</p>
+  <p class="lede">Nine <strong>long-horizon task and motion planning</strong> problems for a 7-joint Franka Panda arm
+  with a parallel gripper, simulated in MuJoCo through robosuite. Each task is only a goal on how the objects should
+  end up — no sequence of steps is given. Reaching it takes a chain of several manipulations (bringing objects into
+  reach with a tool, clearing an occupied spot, packing several boxes in turn), each planned as continuous robot
+  motion, and every reset draws a new random scene.</p>
 
   <div class="grid3" style="margin-top:14px">
     <div class="card"><h3>The scene</h3>
@@ -97,16 +98,6 @@
   <h3>The prompt</h3>
   <p class="small">The task, as one prompt (also in <code>prompts/PROMPT.md</code>, ready to give to any agent):</p>
   <details class="card" open><summary>Show the prompt</summary><pre id="prompt-merged"></pre></details>
-  <details class="card" style="margin-top:10px"><summary>How each agent actually received it</summary>
-    <p class="small">The content is the same; the delivery differed. Codex got the core task as a <code>/goal</code>
-    and three follow-ups typed during its run (code per environment, videos of 5 random seeds, the compact
-    iteration report). Claude got everything in one message, with the iteration report included from the start
-    and its own sub-folder <code>/workspace/claude/</code>.</p>
-    <div class="grid2">
-      <div><h4><span class="tag codex"><span>Codex</span></span></h4><pre id="prompt-codex"></pre></div>
-      <div><h4><span class="tag claude"><span>Claude Code</span></span></h4><pre id="prompt-claude"></pre></div>
-    </div>
-  </details>
 </section>
 
 <section id="results">
@@ -114,38 +105,19 @@
   <p>Success = the episode ends with <code>terminated=True</code> (goal reached) before the time limit. Codex
   evaluated 20 seeds per environment; Claude evaluated 60 distinct scenes per environment, 20 of which it had
   never run before the final cycle.</p>
-  <div class="btnrow" style="margin-bottom:10px">
-    <span class="lbl">Claude seeds</span>
-    <button class="btn active" data-claudeset="claude">all 60</button>
-    <button class="btn" data-claudeset="claude20">first 20 (same count as Codex)</button>
-    <span class="lbl" style="margin-left:18px">View</span>
-    <button class="btn active" data-resview="chart">chart</button>
-    <button class="btn" data-resview="table">table</button>
-  </div>
-  <div class="chart" id="reschart"></div>
-  <div id="restable" style="display:none"></div>
-
-  <h3>Getting there: success over the run</h3>
-  <p class="small muted">Every evaluation each agent ran, at the time it finished. Hover for details; click a point
-  to open that iteration below. Runs differ in how many episodes they cover (shown as point size).</p>
-  <div class="chart" id="progresschart"></div>
+  <div id="restable"></div>
 </section>
 
 <section id="videos">
   <h2>Video explorer</h2>
-  <p>All 90 recorded episodes (5 per task and agent). Each was replayed with state logging — the replays reproduce
-  every recorded episode step for step — so the map and charts beside the video show exactly what happens in it.
-  Pick a task and seed, scrub, slow down, or jump to an event.</p>
+  <p>One recorded episode per task and agent, side by side. Each was replayed with state logging — the replays
+  reproduce the recorded episodes step for step — so the map and events beside the video show exactly what happens
+  in it. Pick a task, scrub, slow down, or jump to an event.</p>
   <div class="explorer">
     <div class="controls-top">
       <div class="btnrow taskbtns" id="taskbtns"><span class="lbl">Task</span></div>
-      <div class="btnrow" id="modebtns"><span class="lbl">Show</span>
-        <button class="btn codex" data-mode="codex"><span class="dot" style="background:var(--codex)"></span>Codex</button>
-        <button class="btn claude" data-mode="claude"><span class="dot" style="background:var(--claude)"></span>Claude</button>
-        <button class="btn active" data-mode="both">side by side</button>
-        <span class="small muted" style="margin-left:12px">Keys: <span class="kbd">space</span> play/pause ·
-        <span class="kbd">←</span><span class="kbd">→</span> step · <span class="kbd">[</span><span class="kbd">]</span> previous/next event</span>
-      </div>
+      <p class="small muted" style="margin:0">Keys: <span class="kbd">space</span> play/pause ·
+        <span class="kbd">←</span><span class="kbd">→</span> step · <span class="kbd">[</span><span class="kbd">]</span> previous/next event</p>
       <div class="goalbox" id="goalbox"></div>
     </div>
     <div class="players" id="players"></div>
@@ -176,6 +148,7 @@
   </div>
 </section>
 
+<!-- Conversation logs (disabled)
 <section id="logs">
   <h2>Conversation logs</h2>
   <p>The prompts, the agents' own narration, and every command they ran (outputs omitted). Times are minutes since
@@ -188,15 +161,18 @@
     <label class="small"><input type="checkbox" data-logkind="user" checked> prompts</label>
     <label class="small"><input type="checkbox" data-logkind="agent" checked> narration</label>
     <label class="small"><input type="checkbox" data-logkind="tool"> commands</label>
-    <input type="search" id="logsearch" placeholder="search…" style="margin-left:auto;padding:6px 10px;border:1px solid var(--border);border-radius:8px;min-width:220px">
+    <input type="search" id="logsearch" placeholder="search…" style="margin-left:auto;padding:6px 10px;border:1px solid var(- -border);border-radius:8px;min-width:220px">
   </div>
   <div class="small muted" id="logcount"></div>
   <div class="card" style="max-height:620px;overflow:auto;padding:0"><table id="logtable"><tbody></tbody></table></div>
 </section>
+-->
 
 <section id="code">
   <h2>The code</h2>
-  <p>Every file of each agent's final solution. One command runs a task, e.g. <code>python solutions/PackRack-v2.py --seed 1</code>.</p>
+  <p>Each agent's solutions (the files in its <code>solutions/</code> folder). One command runs a task, e.g.
+  <code>python solutions/PackRack-v2.py --seed 1</code>. The environment code is on
+  <a id="envcode" href="#">GitHub</a>.</p>
   <div class="btnrow" style="margin-bottom:8px">
     <span class="lbl">Agent</span>
     <button class="btn claude active" data-codeagent="claude">Claude</button>
@@ -209,27 +185,7 @@
   </div>
 </section>
 
-<section id="notes">
-  <h2>Caveats</h2>
-  <ul>
-    <li><strong>Privileged state.</strong> Both agents control from <code>get_state()</code>, the simulator's exact
-    object poses, not from camera images. These are state-based controllers.</li>
-    <li><strong>Different evaluation sizes.</strong> Codex: 20 seeds per environment. Claude: 60 distinct scenes,
-    of which seeds 41–60 were held out until cycle 10 (178/180 there; the two BlueSpot failures were then fixed
-    and those two environments re-run).</li>
-    <li><strong>Seeds.</strong> <code>reset(seed)</code> skips seeds whose scene is invalid, and which seeds are
-    skipped can depend on what the same environment instance did before. Claude evaluated only seeds that a fresh
-    environment maps to themselves; Codex used seeds 0, 1000, …, 19000. A fresh process reproduces each scene.</li>
-    <li><strong>Free episode.</strong> One RedBoxToBlueSpot-v0 scene already satisfies its goal at reset (the red
-    box starts within 0.15 m of the blue box's start): success at step 1. It appears in both agents' videos.</li>
-    <li><strong>Self-reported runs, independently replayed videos.</strong> The success tables are the agents' own
-    evaluations (checked against their raw result files). The 90 video episodes were re-run for this page and
-    matched the recordings exactly.</li>
-    <li><strong>A process mistake.</strong> During the Codex run a second, unintended Codex process also wrote to
-    <code>/workspace</code> for its first ~1.7 hours before it was stopped; its intermediate files may be mixed
-    into Codex's development folder. The final evaluation ran after it stopped.</li>
-  </ul>
-</section>
+
 
 <footer>Built from the two runs' workspaces, evaluation files and transcripts. Repository layout and how to try the
 environments yourself: see <code>README.md</code> at the repository root.</footer>

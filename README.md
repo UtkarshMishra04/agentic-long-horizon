@@ -1,7 +1,8 @@
 # RoboEnvs × coding agents
 
-Can a coding agent write robot controllers from scratch? This repository holds a small manipulation benchmark,
-**RoboEnvs**, and two complete runs of coding agents solving it:
+Can a coding agent write robot controllers from scratch? This repository holds **RoboEnvs**, a benchmark of nine
+long-horizon task and motion planning (TAMP) problems for a Franka Panda arm, and two complete runs of coding agents
+solving it:
 
 | agent | model | effort | time | evaluation | success |
 |---|---|---|---|---|---|
@@ -11,16 +12,15 @@ Can a coding agent write robot controllers from scratch? This repository holds a
 Both agents worked in the same sandbox, with the same task: write Python code that solves all nine environments,
 with no training, learned models or GPU, using only the environments' public interface.
 
-**→ Open [`docs/index.html`](docs/index.html)** in a browser for the full story: the benchmark, the exact prompt,
-results, every evaluation run each agent made (what it observed, what it changed, the code diff and the success
-rate before and after), the conversation logs, all the code, and an interactive explorer for 90 recorded episodes
-with a synchronized top-down map, height and gripper charts and auto-detected events. The page is static (no
-server, no build step); GitHub Pages can serve it from `/docs`.
+**→ Open [`docs/index.html`](docs/index.html)** in a browser: the benchmark, the prompt, results, a side-by-side
+video explorer with a synchronized top-down map and auto-detected events, every evaluation run each agent made (what
+it observed, what it changed, the code diff and the success rate before and after), and both agents' solutions. The
+page is static (no server, no build step); GitHub Pages can serve it from `/docs`.
 
 ## Repository layout
 
 ```
-RoboEnvs/      the benchmark: 9 tabletop tasks for a Franka Panda in robosuite/MuJoCo (pip-installable)
+RoboEnvs/      the benchmark: 9 long-horizon TAMP tasks for a Franka Panda in robosuite/MuJoCo (pip-installable)
 docker/        the sandbox both agents ran in: read-only RoboEnvs, Claude Code + Codex, tmux
 prompts/       PROMPT.md (the task as one prompt) and the prompts as each agent actually received them
 runs/          per agent: final code, evaluation results, its own write-ups, key conversation log
