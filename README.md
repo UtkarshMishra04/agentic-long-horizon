@@ -66,19 +66,3 @@ Inside the container LongHorizonTAMP is at `/opt/LongHorizonTAMP` (root-owned, r
 `agent`, and `/workspace` (a host folder, default `~/longhorizontamp_workspace`) is the only writable place. Give the agent
 [`prompts/PROMPT.md`](prompts/PROMPT.md). Logins persist in Docker volumes; tmux sessions survive closing the
 terminal (`docker/run.sh --stop` removes the container).
-
-## Caveats
-
-- **Privileged state.** Both agents control from `get_state()` — the simulator's exact object poses — not from
-  camera images.
-- **Different evaluation sizes.** Codex evaluated 20 seeds per task, Claude 60 distinct scenes (20 of them held out
-  until its tenth cycle).
-- **Seeds.** `reset(seed)` skips seeds whose scene is invalid, and within one environment instance which seeds are
-  skipped can depend on earlier episodes. A fresh environment always maps a seed to the same scene.
-- **Self-reported tables, independently replayed videos.** Success tables come from the agents' own evaluation
-  files. The 90 video episodes were re-run with state logging for the website and reproduced the recordings step
-  for step.
-- **A process mistake** during the Codex run: a second, unintended Codex process also wrote to `/workspace` for
-  its first ~1.7 hours before it was stopped. The final evaluation ran after it stopped.
-- The raw transcripts (with tool outputs and model reasoning) are not included; `runs/*/log.md` has the prompts,
-  the agents' narration and the commands they ran.
